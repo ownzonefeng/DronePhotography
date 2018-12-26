@@ -20,13 +20,14 @@
         android:width="150dp"/>
 
     <Button
+        android:id="@+id/takePictureBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take picture"
-        android:id="@+id/takePictureBt"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:width="150dp"/>
+        android:width="150dp"
+        android:onClick="takePicture"
+        android:text="TAKE PICTURE" />
 
     <Button
         android:layout_width="wrap_content"
