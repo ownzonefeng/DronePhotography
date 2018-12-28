@@ -176,6 +176,57 @@ public class SDCardModule {
         }
     }
 
+    public void getLatestFlightMedias() {
+        if (!mThreadIsRunning) {
+            mThreadIsRunning = true;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ArrayList<ARDataTransferMedia> mediaList = getMediaList();
+                    ArrayList<ARDataTransferMedia> latestMediaList = new ArrayList<>();
+                    mNbMediasToDownload = 0;
+                    if ((mediaList != null) && !mIsCancelled) {
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HHmmss", Locale.getDefault());
+                        ARDataTransferMedia latestMedia=mediaList.get(0);
+                        Date latestDate = null;
+                        try {
+                            latestDate = dateFormatter.parse(latestMedia.getDate());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (ARDataTransferMedia media : mediaList) {
+                            try {
+                                if(dateFormatter.parse(media.getDate()).after(latestDate)){
+                                    latestDate = dateFormatter.parse(media.getDate());
+                                    latestMedia = media;
+                                }
+
+                            } catch (ParseException e) {
+                                Log.e(TAG, "Exception", e);
+                            }
+
+                            // exit if the async task is cancelled
+                            if (mIsCancelled) {
+                                break;
+                            }
+                        }
+                        latestMediaList.add(latestMedia);
+                        mNbMediasToDownload = 1;
+                    }
+
+                    notifyMatchingMediasFound(mNbMediasToDownload);
+
+                    if ((mNbMediasToDownload != 0) && !mIsCancelled) {
+                        downloadMedias(latestMediaList);
+                    }
+
+                    mThreadIsRunning = false;
+                    mIsCancelled = false;
+                }
+            }).start();
+        }
+    }
+
     public void cancelGetFlightMedias() {
         if (mThreadIsRunning) {
             mIsCancelled = true;
@@ -250,7 +301,6 @@ public class SDCardModule {
             try {
                 Date mediaDate = dateFormatter.parse(dateStr);
                 mediaCal.setTime(mediaDate);
-
                 // if the date are the same day
                 if ((mediaCal.get(Calendar.DAY_OF_MONTH) == (matchingCal.get(Calendar.DAY_OF_MONTH))) &&
                         (mediaCal.get(Calendar.MONTH) == (matchingCal.get(Calendar.MONTH))) &&

@@ -322,6 +322,10 @@ public class BebopDrone {
         }
     }
 
+    public void getLatestMedia(){
+        mSDCardModule.getLatestFlightMedias();
+    }
+
     public void cancelGetLastFlightMedias() {
         mSDCardModule.cancelGetFlightMedias();
     }

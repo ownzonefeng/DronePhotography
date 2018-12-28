@@ -124,6 +124,7 @@ public class BebopActivity extends AppCompatActivity {
         findViewById(R.id.takePictureBt).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mBebopDrone.takePicture();
+                mBebopDrone.getLatestMedia();
             }
         });
         findViewById(R.id.recBt).setOnClickListener(new View.OnClickListener() {
@@ -134,6 +135,7 @@ public class BebopActivity extends AppCompatActivity {
                     mBebopDrone.stopRecording();
                     isRecording = false;
                     recbt.setText("rec");
+                    mBebopDrone.getLatestMedia();
                 }
                 else{
                     mBebopDrone.recordVideo();
@@ -144,24 +146,24 @@ public class BebopActivity extends AppCompatActivity {
             }
         });
 
-        mDownloadBt = (Button)findViewById(R.id.downloadBt);
-        mDownloadBt.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mBebopDrone.getLastFlightMedias();
-
-                mDownloadProgressDialog = new ProgressDialog(BebopActivity.this, R.style.AppCompatAlertDialogStyle);
-                mDownloadProgressDialog.setIndeterminate(true);
-                mDownloadProgressDialog.setMessage("Fetching medias");
-                mDownloadProgressDialog.setCancelable(false);
-                mDownloadProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mBebopDrone.cancelGetLastFlightMedias();
-                    }
-                });
-                mDownloadProgressDialog.show();
-            }
-        });
+//        mDownloadBt = (Button)findViewById(R.id.downloadBt);
+//        mDownloadBt.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mBebopDrone.getLastFlightMedias();
+//
+//                mDownloadProgressDialog = new ProgressDialog(BebopActivity.this, R.style.AppCompatAlertDialogStyle);
+//                mDownloadProgressDialog.setIndeterminate(true);
+//                mDownloadProgressDialog.setMessage("Fetching medias");
+//                mDownloadProgressDialog.setCancelable(false);
+//                mDownloadProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        mBebopDrone.cancelGetLastFlightMedias();
+//                    }
+//                });
+//                mDownloadProgressDialog.show();
+//            }
+//        });
 
         findViewById(R.id.gazUpBt).setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -417,7 +419,7 @@ public class BebopActivity extends AppCompatActivity {
 
         @Override
         public void onMatchingMediasFound(int nbMedias) {
-            mDownloadProgressDialog.dismiss();
+            //mDownloadProgressDialog.dismiss();
 
             mNbMaxDownload = nbMedias;
             mCurrentDownloadIndex = 1;
