@@ -3,16 +3,10 @@ package com.example.zhaodong.dronephotography.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.PixelCopy;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,13 +22,6 @@ import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class BebopActivity extends AppCompatActivity {
     private static final String TAG = "BebopActivity";
     private BebopDrone mBebopDrone;
@@ -47,6 +34,7 @@ public class BebopActivity extends AppCompatActivity {
     private TextView mBatteryLabel;
     private Button mTakeOffLandBt;
     private Button mDownloadBt;
+    private boolean isRecording = false;
 
     private int mNbMaxDownload;
     private int mCurrentDownloadIndex;
@@ -133,14 +121,30 @@ public class BebopActivity extends AppCompatActivity {
             }
         });
 
-//        findViewById(R.id.takePictureBt).setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                mBebopDrone.takePicture();
-//            }
-//        });
+        findViewById(R.id.takePictureBt).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mBebopDrone.takePicture();
+            }
+        });
+        findViewById(R.id.recBt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button recbt = findViewById(R.id.recBt);
+                if(isRecording){
+                    mBebopDrone.stopRecording();
+                    isRecording = false;
+                    recbt.setText("rec");
+                }
+                else{
+                    mBebopDrone.recordVideo();
+                    isRecording = true;
+                    recbt.setText("stop rec");
+                }
+
+            }
+        });
 
         mDownloadBt = (Button)findViewById(R.id.downloadBt);
-        mDownloadBt.setEnabled(false);
         mDownloadBt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mBebopDrone.getLastFlightMedias();
@@ -385,17 +389,14 @@ public class BebopActivity extends AppCompatActivity {
                 case ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_LANDED:
                     mTakeOffLandBt.setText("Take off");
                     mTakeOffLandBt.setEnabled(true);
-                    mDownloadBt.setEnabled(true);
                     break;
                 case ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_FLYING:
                 case ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_HOVERING:
                     mTakeOffLandBt.setText("Land");
                     mTakeOffLandBt.setEnabled(true);
-                    mDownloadBt.setEnabled(false);
                     break;
                 default:
                     mTakeOffLandBt.setEnabled(false);
-                    mDownloadBt.setEnabled(false);
             }
         }
 
@@ -456,55 +457,4 @@ public class BebopActivity extends AppCompatActivity {
             }
         }
     };
-
-    public void takePicture(View view) {
-
-        // Create a bitmap the size of the scene view.
-        final Bitmap bitmap = Bitmap.createBitmap(mVideoView.getWidth(), mVideoView.getHeight(),
-                Bitmap.Config.ARGB_8888);
-
-        // Create a handler thread to offload the processing of the image.
-        final HandlerThread handlerThread = new HandlerThread("PixelCopier");
-        handlerThread.start();
-        // Make the request to copy.
-        PixelCopy.request(mVideoView, bitmap, new PixelCopy.OnPixelCopyFinishedListener() {
-            @Override
-            public void onPixelCopyFinished(int copyResult) {
-                if (copyResult == PixelCopy.SUCCESS) {
-                    Log.e(TAG,bitmap.toString());
-                    saveImage(bitmap);
-                } else {
-                    Toast toast = Toast.makeText(BebopActivity.this,
-                            "Failed to copyPixels: " + copyResult, Toast.LENGTH_LONG);
-                    toast.show();
-                }
-                handlerThread.quitSafely();
-            }
-        } , new Handler(handlerThread.getLooper()));
-    }
-
-    private void saveImage(Bitmap bitmap){
-        String state = Environment.getExternalStorageState();
-        if(Environment.MEDIA_MOUNTED.equals(state)){
-            String img_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
-            String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-
-            String dir_path = img_path+File.separator+"drone_img";
-            File dir_file = new File(dir_path);
-            if(!dir_file.exists()){
-                dir_file.mkdir();
-            }
-
-            File file = new File(dir_file+File.separator+"img_"+timeStamp+".png");
-            try {
-                FileOutputStream outputStream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
-                outputStream.flush();
-                outputStream.close();
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 }
