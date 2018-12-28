@@ -33,7 +33,6 @@ public class BebopActivity extends AppCompatActivity {
 
     private TextView mBatteryLabel;
     private Button mTakeOffLandBt;
-    private Button mDownloadBt;
     private boolean isRecording = false;
 
     private int mNbMaxDownload;
@@ -345,6 +344,59 @@ public class BebopActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         v.setPressed(false);
                         mBebopDrone.setRoll((byte) 0);
+                        mBebopDrone.setFlag((byte) 0);
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+        findViewById(R.id.zoominBt).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        v.setPressed(true);
+                        mBebopDrone.setPitch((byte) 50);
+                        mBebopDrone.setGaz((byte) -50);
+                        mBebopDrone.setFlag((byte) 1);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        v.setPressed(false);
+                        mBebopDrone.setPitch((byte) 0);
+                        mBebopDrone.setGaz((byte) 0);
+                        mBebopDrone.setFlag((byte) 0);
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                return true;
+            }
+        });
+        findViewById(R.id.zoomoutBt).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        v.setPressed(true);
+                        mBebopDrone.setPitch((byte) -50);
+                        mBebopDrone.setGaz((byte) 50);
+                        mBebopDrone.setFlag((byte) 1);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        v.setPressed(false);
+                        mBebopDrone.setPitch((byte) 0);
+                        mBebopDrone.setGaz((byte) 0);
                         mBebopDrone.setFlag((byte) 0);
                         break;
 
