@@ -380,6 +380,7 @@ public class BebopActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
                         mBebopDrone.setPitch((byte) 50);
+                        mBebopDrone.setFlag((byte) 1);
                         mBebopDrone.setGaz((byte) -50);
                         mBebopDrone.setFlag((byte) 1);
                         break;
@@ -387,8 +388,9 @@ public class BebopActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         v.setPressed(false);
                         mBebopDrone.setPitch((byte) 0);
+                        mBebopDrone.setFlag((byte) 1);
                         mBebopDrone.setGaz((byte) 0);
-                        mBebopDrone.setFlag((byte) 0);
+                        mBebopDrone.setFlag((byte) 1);
                         break;
 
                     default:
@@ -406,6 +408,7 @@ public class BebopActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
                         mBebopDrone.setPitch((byte) -50);
+                        mBebopDrone.setFlag((byte) 1);
                         mBebopDrone.setGaz((byte) 50);
                         mBebopDrone.setFlag((byte) 1);
                         break;
@@ -413,8 +416,9 @@ public class BebopActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         v.setPressed(false);
                         mBebopDrone.setPitch((byte) 0);
+                        mBebopDrone.setFlag((byte) 1);
                         mBebopDrone.setGaz((byte) 0);
-                        mBebopDrone.setFlag((byte) 0);
+                        mBebopDrone.setFlag((byte) 1);
                         break;
 
                     default:
