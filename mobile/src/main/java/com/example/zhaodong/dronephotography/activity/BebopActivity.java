@@ -1,5 +1,6 @@
 package com.example.zhaodong.dronephotography.activity;
 
+import android.app.ActionBar;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -49,6 +50,12 @@ public class BebopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bebop);
+
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 
         initIHM();
 
@@ -171,6 +178,7 @@ public class BebopActivity extends AppCompatActivity {
 //            }
 //        });
 
+        //Go up:
         findViewById(R.id.gazUpBt).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -217,13 +225,14 @@ public class BebopActivity extends AppCompatActivity {
             }
         });
 
+        //Turn left:
         findViewById(R.id.yawLeftBt).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
-                        mBebopDrone.setYaw((byte) -50);
+                        mBebopDrone.setYaw((byte) -100);
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -240,13 +249,14 @@ public class BebopActivity extends AppCompatActivity {
             }
         });
 
+        //Turn right:
         findViewById(R.id.yawRightBt).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
-                        mBebopDrone.setYaw((byte) 50);
+                        mBebopDrone.setYaw((byte) 100);
                         break;
 
                     case MotionEvent.ACTION_UP:
