@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,14 +29,14 @@ import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BebopActivity extends AppCompatActivity {
     private static final String TAG = "BebopActivity";
     private BebopDrone mBebopDrone;
 
     private ProgressDialog mConnectionProgressDialog;
-    private ProgressDialog mDownloadProgressDialog;
-
     private H264VideoView mVideoView;
 
     private TextView mBatteryLabel;
@@ -43,6 +45,11 @@ public class BebopActivity extends AppCompatActivity {
     private NotificationCompat.Builder mNotifyBuilder;
     private NotificationManager mNotifyManager;
 
+
+    private TextView timer ;
+    private long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
+    private Handler handler;
+    private int Seconds, Minutes, MilliSeconds ;
     private int mNbMaxDownload;
     private int mCurrentDownloadIndex;
 
@@ -51,6 +58,11 @@ public class BebopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bebop);
 
+        //Set up timer:
+        timer = (TextView)findViewById(R.id.tvTimer);
+        timer.setVisibility(View.INVISIBLE);
+
+        handler = new Handler() ;
 
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
@@ -110,6 +122,32 @@ public class BebopActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+    public Runnable runnable = new Runnable() {
+
+        public void run() {
+
+            MillisecondTime = SystemClock.uptimeMillis() - StartTime;
+
+            UpdateTime = TimeBuff + MillisecondTime;
+
+            Seconds = (int) (UpdateTime / 1000);
+
+            Minutes = Seconds / 60;
+
+            Seconds = Seconds % 60;
+
+            MilliSeconds = (int) (UpdateTime % 1000);
+
+            timer.setText("" + String.format("%02d", Minutes) + ":"
+                    + String.format("%02d", Seconds));
+
+            handler.postDelayed(this, 0);
+        }
+
+    };
+
+
     private void initIHM() {
         mVideoView = (H264VideoView) findViewById(R.id.videoView);
 
@@ -141,42 +179,47 @@ public class BebopActivity extends AppCompatActivity {
                 mBebopDrone.getLatestMedia();
             }
         });
+
+
+
         findViewById(R.id.recBt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Button recbt = findViewById(R.id.recBt);
                 if(isRecording){
                     mBebopDrone.stopRecording();
                     isRecording = false;
                     recbt.setText("rec");
                     mBebopDrone.getLatestMedia();
+
+                    MillisecondTime = 0L ;
+                    StartTime = 0L ;
+                    TimeBuff = 0L ;
+                    UpdateTime = 0L ;
+                    Seconds = 0 ;
+                    Minutes = 0 ;
+                    MilliSeconds = 0 ;
+
+                    timer.setVisibility(View.INVISIBLE);
+                    timer.setText("00:00");
                 }
                 else{
                     mBebopDrone.recordVideo();
                     isRecording = true;
                     recbt.setText("stop rec");
+
+                    timer.setVisibility(View.VISIBLE);
+                    StartTime = SystemClock.uptimeMillis();
+                    handler.postDelayed(runnable, 0);
                 }
             }
         });
 
-//        mDownloadBt = (Button)findViewById(R.id.downloadBt);
-//        mDownloadBt.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                mBebopDrone.getLastFlightMedias();
-//
-//                mDownloadProgressDialog = new ProgressDialog(BebopActivity.this, R.style.AppCompatAlertDialogStyle);
-//                mDownloadProgressDialog.setIndeterminate(true);
-//                mDownloadProgressDialog.setMessage("Fetching medias");
-//                mDownloadProgressDialog.setCancelable(false);
-//                mDownloadProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        mBebopDrone.cancelGetLastFlightMedias();
-//                    }
-//                });
-//                mDownloadProgressDialog.show();
-//            }
-//        });
+
+
+
 
         //Go up:
         findViewById(R.id.gazUpBt).setOnTouchListener(new View.OnTouchListener() {
