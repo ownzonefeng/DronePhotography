@@ -43,83 +43,100 @@
         android:width="150dp"
         android:text="Take Off" />
 
-    <Button
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="right"
+    <ImageButton
         android:id="@+id/yawRightBt"
-        android:layout_centerVertical="true"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false"/>
-
-    <Button
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="left"
-        android:id="@+id/rollLeftBt"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
+        android:src="@mipmap/turn_right"
+        android:text="right" />
+
+    <ImageButton
+        android:id="@+id/rollLeftBt"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:width="50dp"/>
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:width="50dp"
+        android:src="@mipmap/left"
+        android:text="left" />
 
-    <Button
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="left"
+    <ImageButton
         android:id="@+id/yawLeftBt"
-        android:layout_below="@+id/gazUpBt"
-        android:layout_toLeftOf="@+id/gazUpBt"
-        android:layout_toStartOf="@+id/gazUpBt"/>
-
-    <Button
         android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:text="right"
+        android:layout_below="@+id/gazUpBt"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_toStartOf="@+id/gazUpBt"
+        android:layout_toLeftOf="@+id/gazUpBt"
+        android:src="@mipmap/turn_left"
+        android:text="left" />
+
+    <ImageButton
         android:id="@+id/rollRightBt"
-        android:width="20dp"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/backBt"
+        android:layout_toEndOf="@+id/backBt"
         android:layout_toRightOf="@+id/backBt"
-        android:layout_toEndOf="@+id/backBt"/>
+        android:width="20dp"
+        android:src="@mipmap/right"
+        android:text="right" />
 
-    <Button
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:text="up"
+    <ImageButton
         android:id="@+id/gazUpBt"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/yawRightBt"
-        android:layout_toLeftOf="@+id/yawRightBt"
         android:layout_toStartOf="@+id/yawRightBt"
-        android:width="110dp"/>
-
-    <Button
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:text="down"
-        android:id="@+id/gazDownBt"
+        android:layout_toLeftOf="@+id/yawRightBt"
         android:width="110dp"
+        android:src="@mipmap/up"
+        android:text="up" />
+
+    <ImageButton
+        android:id="@+id/gazDownBt"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/yawRightBt"
+        android:layout_toEndOf="@+id/yawLeftBt"
         android:layout_toRightOf="@+id/yawLeftBt"
-        android:layout_toEndOf="@+id/yawLeftBt"/>
+        android:width="110dp"
+        android:src="@mipmap/down"
+        android:text="down" />
 
-    <Button
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:text="forward"
+    <ImageButton
         android:id="@+id/forwardBt"
-        android:layout_alignTop="@+id/gazUpBt"
-        android:layout_toRightOf="@+id/rollLeftBt"
-        android:layout_toEndOf="@+id/rollLeftBt"
-        android:width="110dp"/>
-
-    <Button
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:text="back"
-        android:id="@+id/backBt"
-        android:layout_below="@+id/rollLeftBt"
-        android:layout_toRightOf="@+id/rollLeftBt"
+        android:layout_alignTop="@+id/gazUpBt"
+        android:layout_marginStart="-1dp"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginTop="-4dp"
         android:layout_toEndOf="@+id/rollLeftBt"
-        android:width="110dp"/>
+        android:layout_toRightOf="@+id/rollLeftBt"
+        android:width="110dp"
+        android:src="@mipmap/forward"
+        android:text="forward" />
+
+    <ImageButton
+        android:id="@+id/backBt"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rollLeftBt"
+        android:layout_marginStart="-1dp"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/rollLeftBt"
+        android:layout_toRightOf="@+id/rollLeftBt"
+        android:width="110dp"
+        android:src="@mipmap/backward"
+        android:text="back" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -144,17 +161,17 @@
         android:textColor="#ff0000" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="roll"
-        android:id="@+id/textView2"
-        android:width="50dp"
-        android:textAlignment="center"
-        android:gravity="center_horizontal"
         android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/rollLeftBt"
         android:layout_toRightOf="@+id/rollLeftBt"
-        android:layout_toEndOf="@+id/rollLeftBt"/>
+        android:width="50dp"
+        android:gravity="center_horizontal"
+        android:text="move"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:layout_width="110dp"
@@ -217,7 +234,7 @@
         android:layout_marginBottom="0dp"
         android:text="00:00"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/holo_green_dark"
         android:textSize="18sp" />
 
 </RelativeLayout>
