@@ -426,9 +426,11 @@ public class BebopActivity extends AppCompatActivity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
-                        mBebopDrone.setPitch((byte) 80);
+                        //Forward:
+                        mBebopDrone.setPitch((byte) 60);
                         mBebopDrone.setFlag((byte) 1);
-                        mBebopDrone.setGaz((byte) -50);
+                        //Down:
+                        mBebopDrone.setGaz((byte) -40);
                         mBebopDrone.setFlag((byte) 1);
                         break;
 
@@ -454,9 +456,11 @@ public class BebopActivity extends AppCompatActivity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
-                        mBebopDrone.setPitch((byte) -80);
+                        //Back:
+                        mBebopDrone.setPitch((byte) -60);
                         mBebopDrone.setFlag((byte) 1);
-                        mBebopDrone.setGaz((byte) 50);
+                        //Up:
+                        mBebopDrone.setGaz((byte) 40);
                         mBebopDrone.setFlag((byte) 1);
                         break;
 
