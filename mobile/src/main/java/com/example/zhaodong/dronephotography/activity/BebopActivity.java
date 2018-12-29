@@ -1,9 +1,12 @@
 package com.example.zhaodong.dronephotography.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,6 +25,8 @@ import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
+import java.util.List;
+
 public class BebopActivity extends AppCompatActivity {
     private static final String TAG = "BebopActivity";
     private BebopDrone mBebopDrone;
@@ -34,6 +39,8 @@ public class BebopActivity extends AppCompatActivity {
     private TextView mBatteryLabel;
     private Button mTakeOffLandBt;
     private boolean isRecording = false;
+    private NotificationCompat.Builder mNotifyBuilder;
+    private NotificationManager mNotifyManager;
 
     private int mNbMaxDownload;
     private int mCurrentDownloadIndex;
@@ -49,6 +56,7 @@ public class BebopActivity extends AppCompatActivity {
         ARDiscoveryDeviceService service = intent.getParcelableExtra(DeviceListActivity.EXTRA_DEVICE_SERVICE);
         mBebopDrone = new BebopDrone(this, service);
         mBebopDrone.addListener(mBebopListener);
+        mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
     }
 
@@ -141,7 +149,6 @@ public class BebopActivity extends AppCompatActivity {
                     isRecording = true;
                     recbt.setText("stop rec");
                 }
-
             }
         });
 
@@ -476,39 +483,49 @@ public class BebopActivity extends AppCompatActivity {
             mNbMaxDownload = nbMedias;
             mCurrentDownloadIndex = 1;
 
-            if (nbMedias > 0) {
-                mDownloadProgressDialog = new ProgressDialog(BebopActivity.this, R.style.AppCompatAlertDialogStyle);
-                mDownloadProgressDialog.setIndeterminate(false);
-                mDownloadProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                mDownloadProgressDialog.setMessage("Downloading medias");
-                mDownloadProgressDialog.setMax(mNbMaxDownload * 100);
-                mDownloadProgressDialog.setSecondaryProgress(mCurrentDownloadIndex * 100);
-                mDownloadProgressDialog.setProgress(0);
-                mDownloadProgressDialog.setCancelable(false);
-                mDownloadProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mBebopDrone.cancelGetLastFlightMedias();
-                    }
-                });
-                mDownloadProgressDialog.show();
+//            if (nbMedias > 0) {
+//                mDownloadProgressDialog = new ProgressDialog(BebopActivity.this, R.style.AppCompatAlertDialogStyle);
+//                mDownloadProgressDialog.setIndeterminate(false);
+//                mDownloadProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//                mDownloadProgressDialog.setMessage("Downloading medias");
+//                mDownloadProgressDialog.setMax(mNbMaxDownload * 100);
+//                mDownloadProgressDialog.setSecondaryProgress(mCurrentDownloadIndex * 100);
+//                mDownloadProgressDialog.setProgress(0);
+//                mDownloadProgressDialog.setCancelable(false);
+//                mDownloadProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        mBebopDrone.cancelGetLastFlightMedias();
+//                    }
+//                });
+//                mDownloadProgressDialog.show();
+                mNotifyBuilder = new NotificationCompat.Builder(BebopActivity.this, "download");
+                mNotifyBuilder.setContentTitle("DOWNLOAD MEDIA")
+                        .setContentText("Download in progress")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setProgress(0, 0,true)
+                        .setPriority(NotificationCompat.PRIORITY_LOW);
+
+                mNotifyManager.notify(0,mNotifyBuilder.build());
             }
-        }
 
         @Override
         public void onDownloadProgressed(String mediaName, int progress) {
-            mDownloadProgressDialog.setProgress(((mCurrentDownloadIndex - 1) * 100) + progress);
+//            mDownloadProgressDialog.setProgress(((mCurrentDownloadIndex - 1) * 100) + progress);
         }
 
         @Override
         public void onDownloadComplete(String mediaName) {
-            mCurrentDownloadIndex++;
-            mDownloadProgressDialog.setSecondaryProgress(mCurrentDownloadIndex * 100);
-
-            if (mCurrentDownloadIndex > mNbMaxDownload) {
-                mDownloadProgressDialog.dismiss();
-                mDownloadProgressDialog = null;
-            }
+//            mCurrentDownloadIndex++;
+//            mDownloadProgressDialog.setSecondaryProgress(mCurrentDownloadIndex * 100);
+//
+//            if (mCurrentDownloadIndex > mNbMaxDownload) {
+//                mDownloadProgressDialog.dismiss();
+//                mDownloadProgressDialog = null;
+//            }
+            mNotifyBuilder.setProgress(0,0,false)
+                    .setContentText("Download complete");
+            mNotifyManager.notify(0,mNotifyBuilder.build());
         }
     };
 }
