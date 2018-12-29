@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Emergency"
+        android:alpha="0.5"
         android:id="@+id/emergencyBt"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -25,8 +26,9 @@
 
     <ImageButton
         android:id="@+id/takePictureBt"
-        android:layout_width="52dp"
-        android:layout_height="54dp"
+        android:alpha="0.5"
+        android:layout_width="53dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:width="150dp"
@@ -36,6 +38,7 @@
 
     <Button
         android:id="@+id/takeOffOrLandBt"
+        android:alpha="0.5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -45,6 +48,7 @@
 
     <ImageButton
         android:id="@+id/yawRightBt"
+        android:alpha="0.5"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="false"
@@ -55,6 +59,7 @@
 
     <ImageButton
         android:id="@+id/rollLeftBt"
+        android:alpha="0.5"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -66,6 +71,7 @@
 
     <ImageButton
         android:id="@+id/yawLeftBt"
+        android:alpha="0.5"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/gazUpBt"
@@ -79,6 +85,7 @@
 
     <ImageButton
         android:id="@+id/rollRightBt"
+        android:alpha="0.5"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/backBt"
@@ -90,6 +97,7 @@
 
     <ImageButton
         android:id="@+id/gazUpBt"
+        android:alpha="0.5"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/yawRightBt"
@@ -101,6 +109,7 @@
 
     <ImageButton
         android:id="@+id/gazDownBt"
+        android:alpha="0.5"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/yawRightBt"
@@ -112,6 +121,7 @@
 
     <ImageButton
         android:id="@+id/forwardBt"
+        android:alpha="0.5"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/gazUpBt"
@@ -126,6 +136,7 @@
 
     <ImageButton
         android:id="@+id/backBt"
+        android:alpha="0.5"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rollLeftBt"
@@ -139,26 +150,26 @@
         android:text="back" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Battery: "
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#ff0000" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Battery: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/holo_green_light" />
 
     <TextView
+        android:id="@+id/batteryLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="XXX%"
-        android:id="@+id/batteryLabel"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView"
         android:layout_toEndOf="@+id/textView"
-        android:textColor="#ff0000" />
+        android:layout_toRightOf="@+id/textView"
+        android:text="XX%"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/holo_green_light" />
 
     <TextView
         android:id="@+id/textView2"
@@ -187,8 +198,9 @@
 
     <ImageButton
         android:id="@+id/recBt"
-        android:layout_width="52dp"
-        android:layout_height="54dp"
+        android:alpha="0.5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/takePictureBt"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="-3dp"
@@ -200,6 +212,7 @@
 
     <ImageButton
         android:id="@+id/zoominBt"
+        android:alpha="0.5"
         android:layout_width="50dp"
         android:layout_height="51dp"
         android:layout_above="@+id/zoomoutBt"
@@ -212,6 +225,7 @@
 
     <ImageButton
         android:id="@+id/zoomoutBt"
+        android:alpha="0.5"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
