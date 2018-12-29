@@ -196,4 +196,19 @@
         android:layout_marginBottom="0dp"
         android:text="zoom out" />
 
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/recBt"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="258dp"
+        android:layout_marginEnd="252dp"
+        android:layout_marginBottom="0dp"
+        android:text="00:00"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
 </RelativeLayout>
