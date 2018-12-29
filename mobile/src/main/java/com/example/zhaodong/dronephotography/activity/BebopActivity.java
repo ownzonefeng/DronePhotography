@@ -179,6 +179,7 @@ public class BebopActivity extends AppCompatActivity {
         findViewById(R.id.takePictureBt).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mBebopDrone.takePicture();
+                Toast.makeText(BebopActivity.this, R.string.photo_taken, Toast.LENGTH_SHORT).show();
                 mBebopDrone.getLatestMedia();
             }
         });

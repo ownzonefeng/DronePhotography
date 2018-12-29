@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Drone Photography</string>
+    <string name="photo_taken">PHOTO_TAKEN</string>
 </resources>
