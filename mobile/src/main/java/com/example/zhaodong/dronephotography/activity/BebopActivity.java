@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -187,11 +188,10 @@ public class BebopActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                Button recbt = findViewById(R.id.recBt);
+                ImageButton recbt = findViewById(R.id.recBt);
                 if(isRecording){
                     mBebopDrone.stopRecording();
                     isRecording = false;
-                    recbt.setText("rec");
                     mBebopDrone.getLatestMedia();
 
                     MillisecondTime = 0L ;
@@ -204,15 +204,19 @@ public class BebopActivity extends AppCompatActivity {
 
                     timer.setVisibility(View.INVISIBLE);
                     timer.setText("00:00");
+
+                    recbt.setImageResource(R.mipmap.record);
                 }
                 else{
                     mBebopDrone.recordVideo();
                     isRecording = true;
-                    recbt.setText("stop rec");
 
                     timer.setVisibility(View.VISIBLE);
                     StartTime = SystemClock.uptimeMillis();
                     handler.postDelayed(runnable, 0);
+
+
+                    recbt.setImageResource(R.mipmap.stoprecord);
                 }
             }
         });
