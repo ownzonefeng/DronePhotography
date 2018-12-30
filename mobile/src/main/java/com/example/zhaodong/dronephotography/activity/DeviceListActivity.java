@@ -2,8 +2,14 @@ package com.example.zhaodong.dronephotography.activity;
 
 import android.Manifest;
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -26,6 +32,9 @@ import com.parrot.arsdk.ardiscovery.ARDISCOVERY_PRODUCT_ENUM;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryService;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -46,8 +55,38 @@ public class DeviceListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PERMISSIONS_REQUEST = 1;
 
     public DroneDiscoverer mDroneDiscoverer;
+    private ConnectivityManager mConnectivityManager;
 
     private final List<ARDiscoveryDeviceService> mDronesList = new ArrayList<>();
+    private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
+            if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)){
+                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+    public static boolean hasInternetAccess() {
+
+        try {
+            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://clients3.google.com/generate_204").openConnection());
+            urlc.setRequestProperty("User-Agent", "Android");
+            urlc.setRequestProperty("Connection", "close");
+            urlc.setConnectTimeout(1500);
+            urlc.connect();
+            //Connection is successful:
+            if (urlc.getResponseCode() == 204 && urlc.getContentLength() == 0){
+                Log.d(TAG, "Network connection is sucessful!");
+                return true;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error checking internet connection", e);
+        }
+
+        return false;
+    }
 
     // this block loads the native libraries
     // it is mandatory
@@ -65,6 +104,7 @@ public class DeviceListActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+        mConnectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
 
         final ListView listView = (ListView) findViewById(R.id.list);
@@ -156,6 +196,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
         // start discovering
         mDroneDiscoverer.startDiscovering();
+        registerReceiver(mConnReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
