@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -25,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zhaodong.dronephotography.UploadBroadcastReceiver;
 import com.example.zhaodong.dronephotography.discovery.DroneDiscoverer;
 import com.example.zhaodong.dronephotography.R;
 import com.parrot.arsdk.ARSDK;
@@ -55,38 +57,9 @@ public class DeviceListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PERMISSIONS_REQUEST = 1;
 
     public DroneDiscoverer mDroneDiscoverer;
-    private ConnectivityManager mConnectivityManager;
 
     private final List<ARDiscoveryDeviceService> mDronesList = new ArrayList<>();
-    private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-
-            //Check whether connected:
-            boolean isConnected = (activeNetwork != null) && activeNetwork.isConnectedOrConnecting();
-            boolean isWiFi = false;
-
-            if (isConnected) {
-                Log.i(TAG, "Network " + activeNetwork.getTypeName() + " connected");
-                isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-
-                NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
-                if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && isWiFi){
-                    Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
-                }
-            } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {
-                Log.d(TAG, "There's no network connectivity");
-                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
-            }
-
-
-
-        }
-    };
-
+    private UploadBroadcastReceiver mConnReceiver;
 
     // this block loads the native libraries
     // it is mandatory
@@ -104,10 +77,12 @@ public class DeviceListActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
-        mConnectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
+        //Make Navigation Bar semi-transparent
+        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
 
         final ListView listView = (ListView) findViewById(R.id.list);
+        mConnReceiver = new UploadBroadcastReceiver();
 
         // Assign adapter to ListView
         listView.setAdapter(mAdapter);
@@ -159,6 +134,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
                 if (intent != null) {
                     intent.putExtra(EXTRA_DEVICE_SERVICE, service);
+                    unregisterReceiver(mConnReceiver);
                     startActivity(intent);
                 }
             }

@@ -72,6 +72,10 @@ public class BebopActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+        //Make Navigation Bar semi-transparent
+        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+
+
         initIHM();
 
         Intent intent = getIntent();

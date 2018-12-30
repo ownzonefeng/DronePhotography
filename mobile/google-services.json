@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "69180074575",
+    "firebase_url": "https://dronephotography-5543f.firebaseio.com",
+    "project_id": "dronephotography-5543f",
+    "storage_bucket": "dronephotography-5543f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69180074575:android:c3064f70517d1450",
+        "android_client_info": {
+          "package_name": "com.example.zhaodong.dronephotography"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69180074575-jhahb1pv2e6j25o8omah9am3et2v3ul6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zhaodong.dronephotography",
+            "certificate_hash": "8644fe13fba098f00a3941bbffd1b952bf29988b"
+          }
+        },
+        {
+          "client_id": "69180074575-5ckkjnsh2vilb8ruqce23bmus8po37g4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbtMeaecobTcVOdXJTbTCgoocRfXFntEs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69180074575-5ckkjnsh2vilb8ruqce23bmus8po37g4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-
     <!-- Allow access to internet here: -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -81,15 +80,11 @@
                     android:scheme="wear" />
             </intent-filter>
         </service>
-        <!--<service-->
 
-            <!--android:name=".PhotoUploadService"-->
-            <!--android:exported="false" />-->
-
-        <!--<receiver-->
-            <!--android:name=".NetworkStateReceiver"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true"></receiver>-->
+        <receiver
+            android:name=".UploadBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
