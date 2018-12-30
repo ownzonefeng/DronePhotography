@@ -468,6 +468,7 @@ public class BebopActivity extends AppCompatActivity {
                         break;
                 }
 
+                Toast.makeText(BebopActivity.this, R.string.zoom_in, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -498,6 +499,7 @@ public class BebopActivity extends AppCompatActivity {
                         break;
                 }
 
+                Toast.makeText(BebopActivity.this, R.string.zoom_out, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
