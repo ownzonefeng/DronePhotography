@@ -60,33 +60,21 @@ public class DeviceListActivity extends AppCompatActivity {
     private final List<ARDiscoveryDeviceService> mDronesList = new ArrayList<>();
     private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+
+            //Check whether connected to wifi:
+            boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+
             NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
-            if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)){
+            if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && isWiFi){
                 Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
             }else{
                 Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
             }
         }
     };
-    public static boolean hasInternetAccess() {
 
-        try {
-            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://clients3.google.com/generate_204").openConnection());
-            urlc.setRequestProperty("User-Agent", "Android");
-            urlc.setRequestProperty("Connection", "close");
-            urlc.setConnectTimeout(1500);
-            urlc.connect();
-            //Connection is successful:
-            if (urlc.getResponseCode() == 204 && urlc.getContentLength() == 0){
-                Log.d(TAG, "Network connection is sucessful!");
-                return true;
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Error checking internet connection", e);
-        }
-
-        return false;
-    }
 
     // this block loads the native libraries
     // it is mandatory
