@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -16,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -177,6 +179,7 @@ public class BebopActivity extends AppCompatActivity {
         findViewById(R.id.takePictureBt).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mBebopDrone.takePicture();
+                Toast.makeText(BebopActivity.this, R.string.photo_taken, Toast.LENGTH_SHORT).show();
                 mBebopDrone.getLatestMedia();
             }
         });
@@ -426,9 +429,11 @@ public class BebopActivity extends AppCompatActivity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
-                        mBebopDrone.setPitch((byte) 80);
+                        //Forward:
+                        mBebopDrone.setPitch((byte) 60);
                         mBebopDrone.setFlag((byte) 1);
-                        mBebopDrone.setGaz((byte) -50);
+                        //Down:
+                        mBebopDrone.setGaz((byte) -40);
                         mBebopDrone.setFlag((byte) 1);
                         break;
 
@@ -454,9 +459,11 @@ public class BebopActivity extends AppCompatActivity {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
-                        mBebopDrone.setPitch((byte) -80);
+                        //Back:
+                        mBebopDrone.setPitch((byte) -60);
                         mBebopDrone.setFlag((byte) 1);
-                        mBebopDrone.setGaz((byte) 50);
+                        //Up:
+                        mBebopDrone.setGaz((byte) 40);
                         mBebopDrone.setFlag((byte) 1);
                         break;
 
@@ -503,6 +510,21 @@ public class BebopActivity extends AppCompatActivity {
         @Override
         public void onBatteryChargeChanged(int batteryPercentage) {
             mBatteryLabel.setText(String.format("%d%%", batteryPercentage));
+            ImageView battery = findViewById(R.id.battery);
+
+            if(batteryPercentage<100 && batteryPercentage>=70){
+                battery.setImageResource(R.drawable.eighty_percent);
+
+            }else if(batteryPercentage<70 && batteryPercentage>=40) {
+                battery.setImageResource(R.drawable.half);
+
+            }else if (batteryPercentage < 40) {
+                battery.setImageResource(R.drawable.low);
+                mBatteryLabel.setTextColor(Color.RED);
+
+            }else{
+                battery.setImageResource(R.drawable.full);
+            }
         }
 
         @Override
