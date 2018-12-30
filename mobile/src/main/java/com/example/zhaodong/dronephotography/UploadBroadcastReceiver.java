@@ -60,41 +60,44 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
         StorageReference mediaReference = mStorageRef.child("ARSDKMedias");
         File[] fileList = Environment.getExternalStoragePublicDirectory("ARSDKMedias").listFiles();
-        for(File f:fileList){
-            singleThreadExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Uri file = Uri.fromFile(f);
-                    StorageReference riversRef = mediaReference.child(file.getLastPathSegment());
-                    riversRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-                        @Override
-                        public void onSuccess(StorageMetadata storageMetadata) {
+        if(fileList!=null){
+            for(File f:fileList){
+                singleThreadExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        Uri file = Uri.fromFile(f);
+                        StorageReference riversRef = mediaReference.child(file.getLastPathSegment());
+                        riversRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+                            @Override
+                            public void onSuccess(StorageMetadata storageMetadata) {
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            UploadTask uploadTask = riversRef.putFile(file);
-                            uploadTask.addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle unsuccessful uploads
-                                    Toast.makeText(context.getApplicationContext(), "fail to upload one file", Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    Toast.makeText(context.getApplicationContext(), "succeed to upload one file", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
+                            }
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        UploadTask uploadTask = riversRef.putFile(file);
+                                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception exception) {
+                                                // Handle unsuccessful uploads
+                                                Toast.makeText(context.getApplicationContext(), "fail to upload one file", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                Toast.makeText(context.getApplicationContext(), "succeed to upload one file", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                });
 
-                }
-            });
+                    }
+                });
 
 
+            }
         }
+
     }
     }
