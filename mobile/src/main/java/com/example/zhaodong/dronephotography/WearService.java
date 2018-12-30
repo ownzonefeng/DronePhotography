@@ -155,21 +155,11 @@ public class WearService extends WearableListenerService {
 
                 assert uri.getPath() != null;
                 switch (uri.getPath()) {
-                    case BuildConfig.W_example_path_asset:
-                        // Extract the data behind the key you know contains data
-                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig.W_some_other_key);
-                        intent = new Intent("REPLACE_THIS_WITH_A_STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        bitmapFromAsset(asset, intent, "REPLACE_THIS_WITH_A_STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        break;
-                    case BuildConfig.W_example_path_datamap:
-                        // Extract the data behind the key you know contains data
-                        int integer = dataMapItem.getDataMap().getInt(BuildConfig.W_a_key);
-                        ArrayList<Integer> arraylist = dataMapItem.getDataMap().getIntegerArrayList(BuildConfig.W_some_other_key);
-                        for (Integer i : arraylist)
-                            Log.i(TAG, "Got integer " + i + " from array list");
-                        intent = new Intent("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", integer);
-                        intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
+                    case BuildConfig.W_shot_status_path:
+                        double shot_status = dataMapItem.getDataMap().getDouble(BuildConfig
+                                .W_shot_status);
+                        intent = new Intent(BebopActivity.RECEIVED_SHOT);
+                        intent.putExtra(BuildConfig.W_shot_status, shot_status);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
                     default:

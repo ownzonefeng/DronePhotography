@@ -8,11 +8,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -58,6 +60,9 @@ public class BebopActivity extends AppCompatActivity {
     private int Seconds, Minutes, MilliSeconds ;
     private int mNbMaxDownload;
     private int mCurrentDownloadIndex;
+    private RemoteTakePic RemoteTakePic;
+
+    public static final String RECEIVED_SHOT = "RECEIVE_SHOT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,11 @@ public class BebopActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+        RemoteTakePic = new RemoteTakePic();
+        LocalBroadcastManager.getInstance(this).registerReceiver(RemoteTakePic, new
+                IntentFilter(RECEIVED_SHOT));
+        Toast.makeText(BebopActivity.this,"reg Listener", Toast.LENGTH_SHORT).show();
+
         //Make the navigation bar transparent:
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -123,6 +133,7 @@ public class BebopActivity extends AppCompatActivity {
             mConnectionProgressDialog.setMessage("Disconnecting ...");
             mConnectionProgressDialog.setCancelable(false);
             mConnectionProgressDialog.show();
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(RemoteTakePic);
 
             if (!mBebopDrone.disconnect()) {
                 finish();
@@ -162,13 +173,19 @@ public class BebopActivity extends AppCompatActivity {
 
     };
 
+
     public class RemoteTakePic extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            double shot = intent.getDoubleExtra("ShotStatus", 0);
+            double shot = intent.getDoubleExtra("ShotStatus", 1);
+            Toast.makeText(context.getApplicationContext(), "Receive", Toast.LENGTH_SHORT);
             if(shot == 1){
                 mBebopDrone.takePicture();
                 mBebopDrone.getLatestMedia();
+                Toast.makeText(context.getApplicationContext(), "Shot taken", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(context.getApplicationContext(), String.valueOf(shot), Toast.LENGTH_SHORT).show();
             }
         }
     }
