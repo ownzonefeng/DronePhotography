@@ -74,16 +74,9 @@ public class DeviceListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
 
-        // Hide the status bar.
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
-        //Make the navigation bar transparent:
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-
         final ListView listView = (ListView) findViewById(R.id.list);
+
+        //Initialize a new BroadcastReceiver:
         mConnReceiver = new UploadBroadcastReceiver();
 
         // Assign adapter to ListView
@@ -167,6 +160,13 @@ public class DeviceListActivity extends AppCompatActivity {
     protected void onResume()
     {
         super.onResume();
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        //Make the View fullscreen:
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         // setup the drone discoverer and register as listener
         mDroneDiscoverer.setup();

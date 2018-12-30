@@ -70,15 +70,6 @@ public class BebopActivity extends AppCompatActivity {
 
         handler = new Handler() ;
 
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
-        //Make the navigation bar transparent:
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-
         initIHM();
 
         Intent intent = getIntent();
@@ -107,6 +98,20 @@ public class BebopActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        //Make the navigation bar transparent:
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
     }
 
     @Override

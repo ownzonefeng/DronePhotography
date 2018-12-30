@@ -3,6 +3,7 @@ package com.example.zhaodong.dronephotography;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -11,6 +12,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,14 +49,38 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
             isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
             NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
             if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && isWiFi){
-                Toast.makeText(context.getApplicationContext(), "Internet Connected\nstart Firebase sync", Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Connected", Toast.LENGTH_LONG).show();
+
+                TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
+                ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
+
+                textView.setText("Synchronizing");
+                textView.setTextColor(Color.GREEN);
+                imageView.setImageResource(R.drawable.firebase_yes);
+
                 fireBaseUpload(context);
             }else{
-                Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_LONG).show();
+
+                TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
+                ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
+
+                textView.setText("NonSync");
+                textView.setTextColor(Color.BLACK);
+                imageView.setImageResource(R.drawable.firebase_not);
+
             }
         } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {
             Log.d(TAG, "There's no network connectivity");
-            Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_LONG).show();
+
+            TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
+            ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
+
+            textView.setText("NonSync");
+            textView.setTextColor(Color.BLACK);
+            imageView.setImageResource(R.drawable.firebase_not);
+
         }
     }
 
