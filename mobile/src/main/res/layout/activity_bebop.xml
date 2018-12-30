@@ -161,7 +161,7 @@
         android:layout_toRightOf="@+id/textView"
         android:text="XX%"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/holo_green_light" />
+        android:textColor="@android:color/holo_green_dark" />
 
     <TextView
         android:id="@+id/textView2"
@@ -251,6 +251,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="23dp"
         android:layout_marginTop="9dp"
-        app:srcCompat="@mipmap/full" />
+        app:srcCompat="@drawable/full" />
 
 </RelativeLayout>
