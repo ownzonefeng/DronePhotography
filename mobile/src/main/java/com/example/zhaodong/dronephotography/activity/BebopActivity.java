@@ -610,7 +610,7 @@ public class BebopActivity extends AppCompatActivity {
                 mNotifyBuilder = new NotificationCompat.Builder(BebopActivity.this, "download");
                 mNotifyBuilder.setContentTitle("DOWNLOAD MEDIA")
                         .setContentText("Download in progress")
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.app_icon)
                         .setProgress(0, 0,true)
                         .setPriority(NotificationCompat.PRIORITY_LOW);
 
