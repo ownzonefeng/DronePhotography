@@ -3,10 +3,16 @@
     package="com.example.zhaodong.dronephotography">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-feature android:name="android.hardware.usb.accessory" android:required="false"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Allow access to internet here: -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.usb.accessory"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -18,48 +24,48 @@
             android:name=".activity.DeviceListActivity"
             android:screenOrientation="landscape">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.UsbAccessoryActivityImpl"
-            android:theme="@android:style/Theme.NoDisplay"
+        <activity
+            android:name=".activity.UsbAccessoryActivityImpl"
             android:noHistory="true"
-            android:taskAffinity="com.parrot.sdk.usb">
+            android:taskAffinity="com.parrot.sdk.usb"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
             </intent-filter>
+
             <meta-data
                 android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
                 android:resource="@xml/usb_accessory_filter" />
         </activity>
         <activity
             android:name=".activity.BebopActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape"/>
-
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SkyControllerActivity"
-            android:screenOrientation="landscape"/>
-
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.SkyController2Activity"
-            android:screenOrientation="landscape"/>
-
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.JSActivity"
-            android:screenOrientation="landscape"/>
-
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.MiniDroneActivity"
-            android:screenOrientation="landscape"/>
-
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.SwingDroneActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
+
         <service android:name=".WearService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
@@ -67,12 +73,21 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
                     android:scheme="wear" />
             </intent-filter>
         </service>
+        <service
+            android:name=".PhotoUploadService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".NetworkStateReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
