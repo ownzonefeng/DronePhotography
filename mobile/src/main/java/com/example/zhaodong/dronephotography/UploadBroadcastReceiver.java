@@ -11,8 +11,10 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zhaodong.dronephotography.activity.BebopActivity;
 import com.example.zhaodong.dronephotography.activity.DeviceListActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,14 +47,14 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
             isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
             NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
             if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && isWiFi){
-                Toast.makeText(context.getApplicationContext(), "Internet Connected\nstart Firebase sync", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Connected\nstart Firebase sync", Toast.LENGTH_LONG).show();
                 fireBaseUpload(context);
             }else{
-                Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_LONG).show();
             }
         } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {
             Log.d(TAG, "There's no network connectivity");
-            Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -81,12 +83,12 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
                                             @Override
                                             public void onFailure(@NonNull Exception exception) {
                                                 // Handle unsuccessful uploads
-                                                Toast.makeText(context.getApplicationContext(), "fail to upload one file", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context.getApplicationContext(), "fail to upload one file", Toast.LENGTH_LONG).show();
                                             }
                                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
                                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                Toast.makeText(context.getApplicationContext(), "succeed to upload one file", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context.getApplicationContext(), "succeed to upload one file", Toast.LENGTH_LONG).show();
                                             }
                                         });
                                     }
