@@ -63,8 +63,17 @@ public class DeviceListActivity extends AppCompatActivity {
             ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 
-            //Check whether connected to wifi:
-            boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+            //Check whether connected:
+            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            boolean isWiFi = false;
+
+            if (isConnected) {
+                Log.i(TAG, "Network " + activeNetwork.getTypeName() + " connected");
+                isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+            } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {
+                Log.d(TAG, "There's no network connectivity");
+            }
+
 
             NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
             if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && isWiFi){
