@@ -3,8 +3,13 @@
     package="com.example.zhaodong.dronephotography">
 
     <uses-feature android:name="android.hardware.type.watch" />
+    <uses-feature android:name="android.hardware.location.network" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name = "android.permission.BODY_SENSORS"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -48,6 +53,9 @@
                     android:scheme="wear" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBdtRjIEa_Lj2ji8grVgFaZEZV-LRBv6cY"/>
     </application>
 
 </manifest>

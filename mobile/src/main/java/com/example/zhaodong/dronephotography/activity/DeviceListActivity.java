@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -78,8 +79,9 @@ public class DeviceListActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        //Make Navigation Bar semi-transparent
-        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+        //Make the navigation bar transparent:
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
 
         final ListView listView = (ListView) findViewById(R.id.list);
         mConnReceiver = new UploadBroadcastReceiver();

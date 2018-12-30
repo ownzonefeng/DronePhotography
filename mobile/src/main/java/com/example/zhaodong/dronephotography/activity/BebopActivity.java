@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -72,8 +75,8 @@ public class BebopActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        //Make Navigation Bar semi-transparent
-        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+        //Make the navigation bar transparent:
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
 
         initIHM();
@@ -154,6 +157,16 @@ public class BebopActivity extends AppCompatActivity {
 
     };
 
+    public class RemoteTakePic extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            double shot = intent.getDoubleExtra("ShotStatus", 0);
+            if(shot == 1){
+                mBebopDrone.takePicture();
+                mBebopDrone.getLatestMedia();
+            }
+        }
+    }
 
     private void initIHM() {
         mVideoView = (H264VideoView) findViewById(R.id.videoView);
@@ -187,6 +200,7 @@ public class BebopActivity extends AppCompatActivity {
                 mBebopDrone.getLatestMedia();
             }
         });
+
 
 
 
