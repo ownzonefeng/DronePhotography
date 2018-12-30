@@ -45,14 +45,14 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
             isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
             NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
             if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && isWiFi){
-                Toast.makeText(context.getApplicationContext(), "Internet Connected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Connected\nstart Firebase sync", Toast.LENGTH_SHORT).show();
                 fireBaseUpload(context);
             }else{
-                Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_SHORT).show();
             }
         } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {
             Log.d(TAG, "There's no network connectivity");
-            Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "Internet Not Connected\nstop Firebase sync", Toast.LENGTH_SHORT).show();
         }
     }
 
