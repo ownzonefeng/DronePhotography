@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -155,6 +157,16 @@ public class BebopActivity extends AppCompatActivity {
 
     };
 
+    public class RemoteTakePic extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            double shot = intent.getDoubleExtra("ShotStatus", 0);
+            if(shot == 1){
+                mBebopDrone.takePicture();
+                mBebopDrone.getLatestMedia();
+            }
+        }
+    }
 
     private void initIHM() {
         mVideoView = (H264VideoView) findViewById(R.id.videoView);
@@ -188,6 +200,7 @@ public class BebopActivity extends AppCompatActivity {
                 mBebopDrone.getLatestMedia();
             }
         });
+
 
 
 

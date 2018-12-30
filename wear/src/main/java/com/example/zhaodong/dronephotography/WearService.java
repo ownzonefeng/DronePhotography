@@ -36,6 +36,7 @@ public class WearService extends WearableListenerService {
 
     // Tag for Logcat
     private static final String TAG = "WearService";
+    public static final String SHOT_STATUS = "ShotStatus";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -66,6 +67,12 @@ public class WearService extends WearableListenerService {
             case EXAMPLE_ASSET:
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_asset);
                 putDataMapRequest.getDataMap().putAsset(BuildConfig.W_some_other_key, (Asset) intent.getParcelableExtra(IMAGE));
+                sendPutDataMapRequest(putDataMapRequest);
+                break;
+            case SHOT_STATUS:
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_shot_status_path);
+                putDataMapRequest.getDataMap().putDouble(BuildConfig.W_shot_status, intent
+                        .getDoubleExtra(SHOT_STATUS, -1));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
@@ -324,6 +331,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, SHOT_STATUS
     }
 }
