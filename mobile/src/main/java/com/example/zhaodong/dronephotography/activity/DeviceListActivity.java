@@ -131,6 +131,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
                 if (intent != null) {
                     intent.putExtra(EXTRA_DEVICE_SERVICE, service);
+                    unregisterReceiver(mConnReceiver);
                     startActivity(intent);
                 }
             }
