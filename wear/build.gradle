@@ -35,4 +35,5 @@ dependencies {
 
     implementation 'com.google.android.support:wearable:2.4.0'
     compileOnly 'com.google.android.wearable:wearable:2.4.0'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
 }

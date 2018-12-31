@@ -117,7 +117,6 @@ public class BebopActivity extends AppCompatActivity {
         RemoteTakePic = new RemoteTakePic();
         LocalBroadcastManager.getInstance(this).registerReceiver(RemoteTakePic, new
                 IntentFilter(RECEIVED_SHOT));
-        Toast.makeText(BebopActivity.this,"reg Listener", Toast.LENGTH_SHORT).show();
 
         //Make the navigation bar transparent:
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -178,14 +177,13 @@ public class BebopActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             double shot = intent.getDoubleExtra("ShotStatus", 1);
-            Toast.makeText(context.getApplicationContext(), "Receive", Toast.LENGTH_SHORT);
             if(shot == 1){
                 mBebopDrone.takePicture();
                 mBebopDrone.getLatestMedia();
-                Toast.makeText(context.getApplicationContext(), "Shot taken", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), R.string.photo_taken, Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(context.getApplicationContext(), String.valueOf(shot), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), "Failure", Toast.LENGTH_SHORT).show();
             }
         }
     }
