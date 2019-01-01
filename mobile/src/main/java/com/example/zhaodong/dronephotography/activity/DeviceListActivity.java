@@ -110,7 +110,6 @@ public class DeviceListActivity extends AppCompatActivity {
                     case ARDISCOVERY_PRODUCT_JS:
                     case ARDISCOVERY_PRODUCT_JS_EVO_LIGHT:
                     case ARDISCOVERY_PRODUCT_JS_EVO_RACE:
-                        intent = new Intent(DeviceListActivity.this, JSActivity.class);
                         break;
 
                     case ARDISCOVERY_PRODUCT_MINIDRONE:
