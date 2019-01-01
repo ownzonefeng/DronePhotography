@@ -5,11 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.zhaodong.dronephotography.activity.BebopActivity;
+import com.example.zhaodong.dronephotography.view.myARControllerCodec;
+import com.example.zhaodong.dronephotography.view.myARFrame;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,6 +22,7 @@ import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -26,8 +30,11 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.parrot.arsdk.arcontroller.ARFrame;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +44,8 @@ public class WearService extends WearableListenerService {
 
     // Tag for Logcat
     private static final String TAG = "WearService";
+    public static final String SEND_FRAME = "SendFrame";
+    public static final String SEND_CODEC = "SendCodec";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -69,6 +78,16 @@ public class WearService extends WearableListenerService {
                 putDataMapRequest.getDataMap().putAsset(BuildConfig.W_some_other_key, (Asset) intent.getParcelableExtra(IMAGE));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
+            case SEND_FRAME:
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_send_frame_path);
+                myARFrame currentFrame = (myARFrame) intent.getSerializableExtra(SEND_FRAME);
+                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_send_frame, currentFrame.toDataMap());
+                sendPutDataMapRequest(putDataMapRequest);
+            case SEND_CODEC:
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_send_codec_path);
+                myARControllerCodec codec = (myARControllerCodec) intent.getSerializableExtra(SEND_CODEC);
+                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_send_codec, codec.toDataMap());
+                sendPutDataMapRequest(putDataMapRequest);
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -315,6 +334,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, SEND_FRAME, SEND_CODEC
     }
 }

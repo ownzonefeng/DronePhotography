@@ -38,13 +38,19 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
     private LocationBroadcastReceiver locationBroadcastReceiver;
 
 
+    private H264VideoView mVideoView;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MapView wear_map = findViewById(R.id.mapView);
-        wear_map.getMapAsync(this);
+        mVideoView = (H264VideoView) findViewById(R.id.h264VideoView);
+
+        //SupportMapFragment mapFragment = (SupportMapFragment)
+        //mapFragment.getMapAsync(this);
 
         // Enables Always-on
         setAmbientEnabled();
@@ -68,6 +74,14 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(currentLocation).title("Here"));
+        }
+    }
+
+    private class CodecBroadcastReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
         }
     }
 

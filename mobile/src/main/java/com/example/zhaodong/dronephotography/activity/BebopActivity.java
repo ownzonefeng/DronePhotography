@@ -26,16 +26,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zhaodong.dronephotography.WearService;
 import com.example.zhaodong.dronephotography.drone.BebopDrone;
 import com.example.zhaodong.dronephotography.view.H264VideoView;
 import com.example.zhaodong.dronephotography.R;
+import com.example.zhaodong.dronephotography.view.myARControllerCodec;
+import com.example.zhaodong.dronephotography.view.myARFrame;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
+import com.parrot.arsdk.arcontroller.ARCONTROLLER_STREAM_CODEC_TYPE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -592,11 +597,22 @@ public class BebopActivity extends AppCompatActivity {
         @Override
         public void configureDecoder(ARControllerCodec codec) {
             mVideoView.configureDecoder(codec);
+            myARControllerCodec codec_info = new myARControllerCodec(codec);
+            Intent intent = new Intent(BebopActivity.this, WearService.class);
+            intent.setAction(WearService.ACTION_SEND.SEND_FRAME.name());
+            intent.putExtra(WearService.SEND_FRAME, codec_info);
+            startService(intent);
         }
 
         @Override
         public void onFrameReceived(ARFrame frame) {
             mVideoView.displayFrame(frame);
+            myARFrame myFrame = new myARFrame(frame);
+            Intent intent = new Intent(BebopActivity.this, WearService.class);
+            intent.setAction(WearService.ACTION_SEND.SEND_FRAME.name());
+            intent.putExtra(WearService.SEND_FRAME, myFrame);
+            startService(intent);
+
         }
 
         @Override
