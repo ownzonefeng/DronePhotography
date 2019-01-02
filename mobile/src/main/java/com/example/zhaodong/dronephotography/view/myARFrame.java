@@ -23,6 +23,7 @@ public class myARFrame extends ARFrame implements Serializable {
         DataMap dataMap = new DataMap();
         Asset frame_asset = this.createAssetFromFrame();
         dataMap.putAsset("frame", frame_asset);
+        dataMap.putInt("size", frame.getDataSize());
         return dataMap;
     }
 

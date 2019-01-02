@@ -23,6 +23,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.parrot.arsdk.arcontroller.ARCONTROLLER_STREAM_CODEC_TYPE_ENUM;
+import com.parrot.arsdk.arcontroller.ARControllerCodec;
 
 import java.util.Map;
 
@@ -33,6 +35,8 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
     public static final String LONGITUDE = "LONGITUDE";
     public static final String LATITUDE = "LATITUDE";
     public static final String RECEIVED_LOCATION = "RECEIVE_LOCATION";
+    public static final String RECEIVED_CODEC = "RECEIVED_CODEC";
+
     private final String TAG = this.getClass().getSimpleName();
 
     private LocationBroadcastReceiver locationBroadcastReceiver;
@@ -51,6 +55,7 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
 
         //SupportMapFragment mapFragment = (SupportMapFragment)
         //mapFragment.getMapAsync(this);
+
 
         // Enables Always-on
         setAmbientEnabled();
@@ -77,11 +82,14 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
         }
     }
 
-    private class CodecBroadcastReceiver extends BroadcastReceiver{
+    private class CodecBroadcastReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+        int value = intent.getIntExtra(WearService.SEND_CODEC_VALUE, -1);
+        String comment = intent.getStringExtra(WearService.SEND_CODEC_COMMENT);
+        ARCONTROLLER_STREAM_CODEC_TYPE_ENUM type = new ARCONTROLLER_STREAM_CODEC_TYPE_ENUM(value, comment);
+        ARControllerCodec codec = new ARControllerCodec(type);
         }
     }
 

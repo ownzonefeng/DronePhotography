@@ -113,6 +113,60 @@ public class H264VideoView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void displayFrame(byte[] frame_byte, int frame_size) {
+        mReadyLock.lock();
+
+        if ((mMediaCodec != null)) {
+            if (mIsCodecConfigured) {
+                // Here we have either a good PFrame, or an IFrame
+                int index = -1;
+
+                try {
+                    index = mMediaCodec.dequeueInputBuffer(VIDEO_DEQUEUE_TIMEOUT);
+                } catch (IllegalStateException e) {
+                    Log.e(TAG, "Error while dequeue input buffer");
+                }
+                if (index >= 0) {
+                    ByteBuffer b;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        b = mMediaCodec.getInputBuffer(index);
+                    } else {
+                        b = mBuffers[index];
+                        b.clear();
+                    }
+
+                    if (b != null) {
+                        b.put(frame_byte, 0, frame_size);
+                    }
+
+                    try {
+                        mMediaCodec.queueInputBuffer(index, 0, frame_size, 0, 0);
+                    } catch (IllegalStateException e) {
+                        Log.e(TAG, "Error while queue input buffer");
+                    }
+                }
+            }
+
+            // Try to display previous frame
+            MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
+            int outIndex;
+            try {
+                outIndex = mMediaCodec.dequeueOutputBuffer(info, 0);
+
+                while (outIndex >= 0) {
+                    mMediaCodec.releaseOutputBuffer(outIndex, true);
+                    outIndex = mMediaCodec.dequeueOutputBuffer(info, 0);
+                }
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "Error while dequeue input buffer (outIndex)");
+            }
+        }
+
+
+        mReadyLock.unlock();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void configureDecoder(ARControllerCodec codec) {
         mReadyLock.lock();
 

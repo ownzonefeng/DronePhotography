@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.midi.MidiDeviceService;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -18,6 +19,7 @@ import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -37,6 +39,8 @@ public class WearService extends WearableListenerService {
     // Tag for Logcat
     private static final String TAG = "WearService";
     public static final String SHOT_STATUS = "ShotStatus";
+    public static final String SEND_CODEC_VALUE = "SEND_CODEC_VALUE";
+    public static final String SEND_CODEC_COMMENT = "SEND_CODEC_COMMENT";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -178,6 +182,13 @@ public class WearService extends WearableListenerService {
                         intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
+                    case BuildConfig.W_send_codec_path:
+                        DataMap dataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_send_codec);
+                        int value = dataMap.getInt("value");
+                        String comment = dataMap.getString("comment");
+                        Intent intent_codec = new Intent(MainActivity.RECEIVED_CODEC);
+                        intent_codec.putExtra(SEND_CODEC_VALUE, value);
+                        intent_codec.putExtra(SEND_CODEC_COMMENT, comment);
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
                         break;
