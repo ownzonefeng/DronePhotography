@@ -189,9 +189,9 @@ public class SDCardModule {
                     ArrayList<ARDataTransferMedia> mediaList = getMediaList();
                     ArrayList<ARDataTransferMedia> latestMediaList = new ArrayList<>();
                     mNbMediasToDownload = 0;
-                    if ((mediaList != null) && !mIsCancelled) {
-                        File[] fileList = Environment.getExternalStoragePublicDirectory("ARSDKMedias").listFiles();
-                        List<String> fileNameList = new ArrayList<>();
+                    File[] fileList = Environment.getExternalStoragePublicDirectory("ARSDKMedias").listFiles();
+                    List<String> fileNameList = new ArrayList<>();
+                    if ((mediaList != null) && !mIsCancelled && (fileList!=null)) {
                         for(File f:fileList){
                             fileNameList.add(f.getName());
                         }

@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,6 +36,7 @@ import com.parrot.arsdk.ardiscovery.ARDISCOVERY_PRODUCT_ENUM;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryService;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -78,6 +80,10 @@ public class DeviceListActivity extends AppCompatActivity {
 
         //Initialize a new BroadcastReceiver:
         mConnReceiver = new UploadBroadcastReceiver();
+        File f = Environment.getExternalStoragePublicDirectory("ARSDKMedias");
+        if(!f.exists()){
+            f.mkdir();
+        }
 
         // Assign adapter to ListView
         listView.setAdapter(mAdapter);
