@@ -18,10 +18,11 @@ import java.io.File;
 public class GalleryActivity extends AppCompatActivity {
     GridView gridView;
     File[] files;
+    File dir;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        File dir = Environment.getExternalStoragePublicDirectory("ARSDKMedias");
+        dir = Environment.getExternalStoragePublicDirectory("ARSDKMedias");
         if(!dir.exists()){
             dir.mkdir();
         }
@@ -32,14 +33,12 @@ public class GalleryActivity extends AppCompatActivity {
         else{
             setContentView(R.layout.activity_gallery);
             gridView = findViewById(R.id.gview);
-
-
         }
-
     }
     @Override
     protected void onResume() {
         super.onResume();
+        files = dir.listFiles();
         if(files!=null){
             new Thread(new Runnable() {
                 @Override
