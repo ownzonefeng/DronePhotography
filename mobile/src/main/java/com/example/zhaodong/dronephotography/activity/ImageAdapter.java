@@ -27,7 +27,7 @@ public class ImageAdapter extends BaseAdapter {
             String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
             switch (suffix){
                 case "jpg":
-                    bitmapList.add(ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(f.getAbsolutePath()), 512, 384));
+                    bitmapList.add(ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(f.getAbsolutePath()), 512, 288));
                     break;
                 case "mp4":
                     bitmapList.add(ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND));

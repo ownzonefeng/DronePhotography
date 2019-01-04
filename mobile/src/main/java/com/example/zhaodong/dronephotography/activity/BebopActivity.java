@@ -528,6 +528,14 @@ public class BebopActivity extends AppCompatActivity {
                 return true;
             }
         });
+        findViewById(R.id.galleryBebop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(BebopActivity.this,"loading", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(BebopActivity.this, GalleryActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mBatteryLabel = (TextView) findViewById(R.id.batteryLabel);
     }
