@@ -38,6 +38,8 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         files = dir.listFiles();
         if(files.length!=0){
             ImageAdapter imageAdapter = new ImageAdapter(GalleryActivity.this, files);
