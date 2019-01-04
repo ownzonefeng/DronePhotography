@@ -64,7 +64,15 @@
 
     </FrameLayout>
 
-
+    <Button
+        android:id="@+id/galleryBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/Title"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="124dp"
+        android:onClick="galleryonCLick"
+        android:text="Gallery" />
 
 
 </RelativeLayout>

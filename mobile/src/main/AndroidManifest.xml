@@ -8,8 +8,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
-
-
     <!-- Allow access to internet here: -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -18,7 +16,6 @@
     <uses-feature
         android:name="android.hardware.usb.accessory"
         android:required="false" />
-
     <uses-feature android:name="android.hardware.location.network" />
     <uses-feature android:name="android.hardware.location.gps" />
 
@@ -89,7 +86,11 @@
         <receiver
             android:name=".UploadBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.GalleryActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

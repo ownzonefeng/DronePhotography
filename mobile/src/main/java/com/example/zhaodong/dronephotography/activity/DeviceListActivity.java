@@ -227,6 +227,12 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     };
 
+    public void galleryonCLick(View view) {
+        Toast.makeText(this,"loading", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, GalleryActivity.class);
+        startActivity(intent);
+    }
+
     static class ViewHolder {
         public TextView text;
     }

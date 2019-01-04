@@ -49,7 +49,7 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
             isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
             NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
             if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && isWiFi){
-                Toast.makeText(context.getApplicationContext(), "Internet Connected", Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Connected", Toast.LENGTH_SHORT).show();
 
                 TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
                 ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
@@ -60,7 +60,7 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
 
                 fireBaseUpload(context);
             }else{
-                Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_SHORT).show();
 
                 TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
                 ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
@@ -72,7 +72,7 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
             }
         } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {
             Log.d(TAG, "There's no network connectivity");
-            Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(), "Internet Not Connected", Toast.LENGTH_SHORT).show();
 
             TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
             ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
@@ -109,12 +109,12 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
                                             @Override
                                             public void onFailure(@NonNull Exception exception) {
                                                 // Handle unsuccessful uploads
-                                                Toast.makeText(context.getApplicationContext(), "fail to upload one file", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(context.getApplicationContext(), "fail to upload one file", Toast.LENGTH_SHORT).show();
                                             }
                                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
                                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                Toast.makeText(context.getApplicationContext(), "succeed to upload one file", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(context.getApplicationContext(), "succeed to upload one file", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
