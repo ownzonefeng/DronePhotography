@@ -20,6 +20,8 @@ import com.example.zhaodong.dronephotography.BuildConfig;
 import com.example.zhaodong.dronephotography.R;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class GalleryActivity extends AppCompatActivity {
     GridView gridView;
@@ -34,25 +36,6 @@ public class GalleryActivity extends AppCompatActivity {
             dir.mkdir();
         }
         gridView = findViewById(R.id.gview);
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-        files = dir.listFiles();
-        if(files.length!=0){
-            ImageAdapter imageAdapter = new ImageAdapter(GalleryActivity.this, files);
-            gridView.setAdapter(imageAdapter);
-            TextView tv = findViewById(R.id.noMedia);
-            tv.setText("");
-        }
-        else{
-            ImageAdapter imageAdapter = new ImageAdapter(GalleryActivity.this, files);
-            gridView.setAdapter(imageAdapter);
-            TextView tv = findViewById(R.id.noMedia);
-            tv.setText("No media");
-        }
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -63,5 +46,26 @@ public class GalleryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        File[] new_files = dir.listFiles();
+        if(!Arrays.equals(new_files,files)){
+            files = new_files;
+            ImageAdapter imageAdapter = new ImageAdapter(GalleryActivity.this, files);
+            gridView.setAdapter(imageAdapter);
+        }
+
+        if(files.length!=0){
+            TextView tv = findViewById(R.id.noMedia);
+            tv.setText("");
+        }
+        else{
+            TextView tv = findViewById(R.id.noMedia);
+            tv.setText("No media");
+        }
     }
 }
