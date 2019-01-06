@@ -88,7 +88,7 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
         public void onReceive(Context context, Intent intent) {
         int value = intent.getIntExtra(WearService.SEND_CODEC_VALUE, -1);
         String comment = intent.getStringExtra(WearService.SEND_CODEC_COMMENT);
-        ARCONTROLLER_STREAM_CODEC_TYPE_ENUM type = new ARCONTROLLER_STREAM_CODEC_TYPE_ENUM(value, comment);
+        ARCONTROLLER_STREAM_CODEC_TYPE_ENUM type = ARCONTROLLER_STREAM_CODEC_TYPE_ENUM.ARCONTROLLER_STREAM_CODEC_TYPE_H264;
         ARControllerCodec codec = new ARControllerCodec(type);
         }
     }
