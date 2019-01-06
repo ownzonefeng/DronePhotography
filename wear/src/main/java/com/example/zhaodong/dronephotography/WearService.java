@@ -41,6 +41,8 @@ public class WearService extends WearableListenerService {
     public static final String SHOT_STATUS = "ShotStatus";
     public static final String SEND_CODEC_VALUE = "SEND_CODEC_VALUE";
     public static final String SEND_CODEC_COMMENT = "SEND_CODEC_COMMENT";
+    public static final String SEND_FRAME_BYTE = "SEND_FRAME_BYTE";
+    public static final String SEND_FRAME_SIZE = "SEND_FRAME_SIZE";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -189,6 +191,15 @@ public class WearService extends WearableListenerService {
                         Intent intent_codec = new Intent(MainActivity.RECEIVED_CODEC);
                         intent_codec.putExtra(SEND_CODEC_VALUE, value);
                         intent_codec.putExtra(SEND_CODEC_COMMENT, comment);
+                    case BuildConfig.W_send_frame_path:
+                        DataMap dataMap_frame = dataMapItem.getDataMap().getDataMap(BuildConfig.W_send_frame);
+                        Asset frame_asset = dataMap_frame.getAsset("frame");
+                        int size = dataMap_frame.getInt("size");
+                        byte[] frame_byte = frame_asset.getData();
+                        Intent intent_frame = new Intent(MainActivity.RECEIVED_FRAME);
+                        intent_frame.putExtra(SEND_FRAME_BYTE, frame_byte);
+                        intent_frame.putExtra(SEND_FRAME_SIZE, size);
+
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
                         break;

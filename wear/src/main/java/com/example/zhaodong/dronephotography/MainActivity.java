@@ -36,10 +36,13 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
     public static final String LATITUDE = "LATITUDE";
     public static final String RECEIVED_LOCATION = "RECEIVE_LOCATION";
     public static final String RECEIVED_CODEC = "RECEIVED_CODEC";
+    public static final String RECEIVED_FRAME = "RECEIVED_FRAME";
 
     private final String TAG = this.getClass().getSimpleName();
 
     private LocationBroadcastReceiver locationBroadcastReceiver;
+    private CodecBroadcastReceiver CodecBroadcastReceiver;
+    private FrameBroadcastReceiver FrameBroadcastReceiver;
 
 
     private H264VideoView mVideoView;
@@ -90,6 +93,17 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
         String comment = intent.getStringExtra(WearService.SEND_CODEC_COMMENT);
         ARCONTROLLER_STREAM_CODEC_TYPE_ENUM type = ARCONTROLLER_STREAM_CODEC_TYPE_ENUM.ARCONTROLLER_STREAM_CODEC_TYPE_H264;
         ARControllerCodec codec = new ARControllerCodec(type);
+        mVideoView.configureDecoder(codec);
+        }
+    }
+
+    private  class FrameBroadcastReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int  size = intent.getIntExtra(WearService.SEND_FRAME_SIZE, 1);
+            byte[] frame_byte = intent.getByteArrayExtra(WearService.SEND_FRAME_BYTE);
+            mVideoView.displayFrame(frame_byte, size);
+
         }
     }
 
@@ -99,15 +113,17 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
 
         // Get the location data back from the watch
         locationBroadcastReceiver = new LocationBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(locationBroadcastReceiver, new
-                IntentFilter(RECEIVED_LOCATION));
-
+        LocalBroadcastManager.getInstance(this).registerReceiver(locationBroadcastReceiver, new IntentFilter(RECEIVED_LOCATION));
+        LocalBroadcastManager.getInstance(this).registerReceiver(CodecBroadcastReceiver, new IntentFilter(RECEIVED_CODEC));
+        LocalBroadcastManager.getInstance(this).registerReceiver(FrameBroadcastReceiver, new IntentFilter(RECEIVED_FRAME));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(CodecBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(FrameBroadcastReceiver);
     }
 
     @Override
