@@ -10,7 +10,7 @@
         android:id="@+id/gview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numColumns="4"
+        android:numColumns="3"
         android:requiresFadingEdge="horizontal|vertical"
         android:visibility="visible">
 
