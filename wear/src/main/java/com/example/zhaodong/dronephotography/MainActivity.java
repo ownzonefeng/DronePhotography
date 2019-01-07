@@ -41,7 +41,7 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
     private final String TAG = this.getClass().getSimpleName();
 
     private LocationBroadcastReceiver locationBroadcastReceiver;
-    private CodecBroadcastReceiver CodecBroadcastReceiver;
+    //private CodecBroadcastReceiver CodecBroadcastReceiver;
     private FrameBroadcastReceiver FrameBroadcastReceiver;
 
 
@@ -55,6 +55,9 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
 
         mVideoView = (H264VideoView) findViewById(R.id.h264VideoView);
+        ARCONTROLLER_STREAM_CODEC_TYPE_ENUM type = ARCONTROLLER_STREAM_CODEC_TYPE_ENUM.ARCONTROLLER_STREAM_CODEC_TYPE_H264;
+        ARControllerCodec codec = new ARControllerCodec(type);
+        mVideoView.configureDecoder(codec);
 
         //SupportMapFragment mapFragment = (SupportMapFragment)
         //mapFragment.getMapAsync(this);
@@ -84,7 +87,7 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(currentLocation).title("Here"));
         }
     }
-
+/*
     private class CodecBroadcastReceiver extends BroadcastReceiver {
 
         @Override
@@ -95,7 +98,7 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
         ARControllerCodec codec = new ARControllerCodec(type);
         mVideoView.configureDecoder(codec);
         }
-    }
+    }*/
 
     private  class FrameBroadcastReceiver extends BroadcastReceiver{
         @Override
@@ -114,7 +117,8 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
         // Get the location data back from the watch
         locationBroadcastReceiver = new LocationBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(locationBroadcastReceiver, new IntentFilter(RECEIVED_LOCATION));
-        LocalBroadcastManager.getInstance(this).registerReceiver(CodecBroadcastReceiver, new IntentFilter(RECEIVED_CODEC));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(CodecBroadcastReceiver, new IntentFilter(RECEIVED_CODEC));
+        FrameBroadcastReceiver = new FrameBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(FrameBroadcastReceiver, new IntentFilter(RECEIVED_FRAME));
     }
 
@@ -122,7 +126,7 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(CodecBroadcastReceiver);
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(CodecBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(FrameBroadcastReceiver);
     }
 

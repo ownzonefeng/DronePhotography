@@ -605,11 +605,11 @@ public class BebopActivity extends AppCompatActivity {
         @Override
         public void configureDecoder(ARControllerCodec codec) {
             mVideoView.configureDecoder(codec);
-            myARControllerCodec codec_info = new myARControllerCodec(codec);
+            /*myARControllerCodec codec_info = new myARControllerCodec(codec);
             Intent intent = new Intent(BebopActivity.this, WearService.class);
             intent.setAction(WearService.ACTION_SEND.SEND_FRAME.name());
             intent.putExtra(WearService.SEND_FRAME, codec_info);
-            startService(intent);
+            startService(intent);*/
         }
 
         @Override
