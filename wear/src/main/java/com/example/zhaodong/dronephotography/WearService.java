@@ -39,10 +39,6 @@ public class WearService extends WearableListenerService {
     // Tag for Logcat
     private static final String TAG = "WearService";
     public static final String SHOT_STATUS = "ShotStatus";
-    public static final String SEND_CODEC_VALUE = "SEND_CODEC_VALUE";
-    public static final String SEND_CODEC_COMMENT = "SEND_CODEC_COMMENT";
-    public static final String SEND_FRAME_BYTE = "SEND_FRAME_BYTE";
-    public static final String SEND_FRAME_SIZE = "SEND_FRAME_SIZE";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -98,7 +94,7 @@ public class WearService extends WearableListenerService {
     public static final String PATH = "PATH";
 
     public static Asset createAssetFromBitmap(Bitmap bitmap) {
-        bitmap = resizeImage(bitmap, 390);
+        bitmap = resizeImage(bitmap, 164, 93);
 
         if (bitmap != null) {
             final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
@@ -113,26 +109,13 @@ public class WearService extends WearableListenerService {
         super.onCreate();
     }
 
-    private static Bitmap resizeImage(Bitmap bitmap, int newSize) {
+    private static Bitmap resizeImage(Bitmap bitmap, int newWidth, int newHeight) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
         // Image smaller, return it as is!
-        if (width <= newSize && height <= newSize) return bitmap;
+        if (width <= newWidth && height <= newHeight) return bitmap;
 
-        int newWidth;
-        int newHeight;
-
-        if (width > height) {
-            newWidth = newSize;
-            newHeight = (newSize * height) / width;
-        } else if (width < height) {
-            newHeight = newSize;
-            newWidth = (newSize * width) / height;
-        } else {
-            newHeight = newSize;
-            newWidth = newSize;
-        }
 
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
@@ -184,21 +167,10 @@ public class WearService extends WearableListenerService {
                         intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
-                    case BuildConfig.W_send_codec_path:
-                        DataMap dataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_send_codec);
-                        int value = dataMap.getInt("value");
-                        String comment = dataMap.getString("comment");
-                        Intent intent_codec = new Intent(MainActivity.RECEIVED_CODEC);
-                        intent_codec.putExtra(SEND_CODEC_VALUE, value);
-                        intent_codec.putExtra(SEND_CODEC_COMMENT, comment);
-                    case BuildConfig.W_send_frame_path:
-                        DataMap dataMap_frame = dataMapItem.getDataMap().getDataMap(BuildConfig.W_send_frame);
-                        Asset frame_asset = dataMap_frame.getAsset("frame");
-                        int size = dataMap_frame.getInt("size");
-                        byte[] frame_byte = frame_asset.getData();
-                        Intent intent_frame = new Intent(MainActivity.RECEIVED_FRAME);
-                        intent_frame.putExtra(SEND_FRAME_BYTE, frame_byte);
-                        intent_frame.putExtra(SEND_FRAME_SIZE, size);
+                    case BuildConfig.W_send_image_path:
+                        DataMap dataMap_image = dataMapItem.getDataMap().getDataMap(BuildConfig.W_send_image);
+                        intent = new Intent(MainActivity.RECEIVED_IMAGE);
+                        bitmapFromAsset(dataMap_image.getAsset("Image"),intent,MainActivity.RECEIVED_IMAGE);
 
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
@@ -337,7 +309,7 @@ public class WearService extends WearableListenerService {
                         Bitmap bmp = BitmapFactory.decodeStream(assetInputStream);
 
                         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-                        bmp.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteStream);
                         byte[] bytes = byteStream.toByteArray();
                         intent.putExtra(extraName, bytes);
                         LocalBroadcastManager.getInstance(WearService.this).sendBroadcast(intent);

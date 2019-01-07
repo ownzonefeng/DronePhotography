@@ -46,6 +46,7 @@ public class WearService extends WearableListenerService {
     private static final String TAG = "WearService";
     public static final String SEND_FRAME = "SendFrame";
     public static final String SEND_CODEC = "SendCodec";
+    public static final String SEND_IMAGE = "SendImage";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -58,36 +59,15 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-            case STARTACTIVITY:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                break;
-            case MESSAGE:
-                String message = intent.getStringExtra(MESSAGE);
-                if (message == null) message = "";
-                sendMessage(message, intent.getStringExtra(PATH));
-                break;
-            case EXAMPLE_DATAMAP:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
-                putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, intent.getIntExtra(DATAMAP_INT, -1));
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key, intent.getIntegerArrayListExtra(DATAMAP_INT_ARRAYLIST));
+            case SEND_IMAGE:
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_send_image_path);
+                byte[] image_send = (byte[]) intent.getByteArrayExtra(SEND_IMAGE);
+                Bitmap bitmap_image = BitmapFactory.decodeByteArray(image_send, 0, image_send.length);
+                DataMap dataMap = new DataMap();
+                dataMap.putAsset("Image", createAssetFromBitmap(bitmap_image));
+                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_send_image, dataMap);
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            case EXAMPLE_ASSET:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_asset);
-                putDataMapRequest.getDataMap().putAsset(BuildConfig.W_some_other_key, (Asset) intent.getParcelableExtra(IMAGE));
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
-            case SEND_FRAME:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_send_frame_path);
-                myARFrame currentFrame = (myARFrame) intent.getSerializableExtra(SEND_FRAME);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_send_frame, currentFrame.toDataMap());
-                sendPutDataMapRequest(putDataMapRequest);
-            case SEND_CODEC:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_send_codec_path);
-                myARControllerCodec codec = (myARControllerCodec) intent.getSerializableExtra(SEND_CODEC);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_send_codec, codec.toDataMap());
-                sendPutDataMapRequest(putDataMapRequest);
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -105,11 +85,11 @@ public class WearService extends WearableListenerService {
     public static final String PATH = "PATH";
 
     public static Asset createAssetFromBitmap(Bitmap bitmap) {
-        bitmap = resizeImage(bitmap, 390);
+        bitmap = resizeImage(bitmap, 164, 93);
 
         if (bitmap != null) {
             final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteStream);
             return Asset.createFromBytes(byteStream.toByteArray());
         }
         return null;
@@ -120,26 +100,13 @@ public class WearService extends WearableListenerService {
         super.onCreate();
     }
 
-    private static Bitmap resizeImage(Bitmap bitmap, int newSize) {
+    private static Bitmap resizeImage(Bitmap bitmap, int newWidth, int newHeight) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
         // Image smaller, return it as is!
-        if (width <= newSize && height <= newSize) return bitmap;
+        if (width <= newWidth && height <= newHeight) return bitmap;
 
-        int newWidth;
-        int newHeight;
-
-        if (width > height) {
-            newWidth = newSize;
-            newHeight = (newSize * height) / width;
-        } else if (width < height) {
-            newHeight = newSize;
-            newWidth = (newSize * width) / height;
-        } else {
-            newHeight = newSize;
-            newWidth = newSize;
-        }
 
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
@@ -150,6 +117,7 @@ public class WearService extends WearableListenerService {
         return Bitmap.createBitmap(bitmap, 0, 0,
                 width, height, matrix, true);
     }
+
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
@@ -334,6 +302,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, SEND_FRAME, SEND_CODEC
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, SEND_IMAGE
     }
 }

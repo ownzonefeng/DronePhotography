@@ -4,13 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,25 +32,15 @@ import com.parrot.arsdk.arcontroller.ARControllerCodec;
 
 import java.util.Map;
 
-public class MainActivity extends WearableActivity implements OnMapReadyCallback{
+public class MainActivity extends WearableActivity{
 
     private double takePic = 0;
-    private GoogleMap mMap;
-    public static final String LONGITUDE = "LONGITUDE";
-    public static final String LATITUDE = "LATITUDE";
-    public static final String RECEIVED_LOCATION = "RECEIVE_LOCATION";
-    public static final String RECEIVED_CODEC = "RECEIVED_CODEC";
-    public static final String RECEIVED_FRAME = "RECEIVED_FRAME";
+    public static final String RECEIVED_IMAGE = "RECEIVED_IMAGE";
 
     private final String TAG = this.getClass().getSimpleName();
-
-    private LocationBroadcastReceiver locationBroadcastReceiver;
-    //private CodecBroadcastReceiver CodecBroadcastReceiver;
-    private FrameBroadcastReceiver FrameBroadcastReceiver;
-
-
-    private H264VideoView mVideoView;
-
+    private ImageBroadcastReceiver ImageBroadcastReceiver;
+    private ConstraintLayout myLayout;
+    Bitmap bmpProfile;
 
 
     @Override
@@ -54,14 +48,10 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mVideoView = (H264VideoView) findViewById(R.id.h264VideoView);
-        ARCONTROLLER_STREAM_CODEC_TYPE_ENUM type = ARCONTROLLER_STREAM_CODEC_TYPE_ENUM.ARCONTROLLER_STREAM_CODEC_TYPE_H264;
-        ARControllerCodec codec = new ARControllerCodec(type);
-        mVideoView.configureDecoder(codec);
+        TextView guide = findViewById(R.id.ImagePreview);
+        guide.setText("pressing here --->>");
 
-        //SupportMapFragment mapFragment = (SupportMapFragment)
-        //mapFragment.getMapAsync(this);
-
+        myLayout = findViewById(R.id.boxInsetLayout);
 
         // Enables Always-on
         setAmbientEnabled();
@@ -69,80 +59,37 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
 
     }
 
-
-    private class LocationBroadcastReceiver extends BroadcastReceiver {
-
+    private class ImageBroadcastReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Update TextViews
-            double longitude = intent.getDoubleExtra(LONGITUDE, -1);
-            double latitude = intent.getDoubleExtra(LATITUDE, -1);
+            ImageView imageView = findViewById(R.id.PreviewWindow);
+            TextView textView = findViewById(R.id.ImagePreview);
+            TextView clear_view = findViewById(R.id.hint_text);
 
+            clear_view.setText("");
 
-            // Update map
-            LatLng currentLocation = new LatLng(latitude, longitude);
-            Log.e(TAG, "Current location: " + currentLocation);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-            mMap.clear();
-            mMap.addMarker(new MarkerOptions().position(currentLocation).title("Here"));
-        }
-    }
-/*
-    private class CodecBroadcastReceiver extends BroadcastReceiver {
+            byte[] byteArray = intent.getByteArrayExtra(RECEIVED_IMAGE);
+            bmpProfile = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            imageView.setImageBitmap(bmpProfile);
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        int value = intent.getIntExtra(WearService.SEND_CODEC_VALUE, -1);
-        String comment = intent.getStringExtra(WearService.SEND_CODEC_COMMENT);
-        ARCONTROLLER_STREAM_CODEC_TYPE_ENUM type = ARCONTROLLER_STREAM_CODEC_TYPE_ENUM.ARCONTROLLER_STREAM_CODEC_TYPE_H264;
-        ARControllerCodec codec = new ARControllerCodec(type);
-        mVideoView.configureDecoder(codec);
-        }
-    }*/
-
-    private  class FrameBroadcastReceiver extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int  size = intent.getIntExtra(WearService.SEND_FRAME_SIZE, 1);
-            byte[] frame_byte = intent.getByteArrayExtra(WearService.SEND_FRAME_BYTE);
-            mVideoView.displayFrame(frame_byte, size);
-
+            textView.setText("Image Preview");
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Get the location data back from the watch
-        locationBroadcastReceiver = new LocationBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(locationBroadcastReceiver, new IntentFilter(RECEIVED_LOCATION));
-        //LocalBroadcastManager.getInstance(this).registerReceiver(CodecBroadcastReceiver, new IntentFilter(RECEIVED_CODEC));
-        FrameBroadcastReceiver = new FrameBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(FrameBroadcastReceiver, new IntentFilter(RECEIVED_FRAME));
+        ImageBroadcastReceiver = new ImageBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(ImageBroadcastReceiver, new IntentFilter(RECEIVED_IMAGE));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver);
-        //LocalBroadcastManager.getInstance(this).unregisterReceiver(CodecBroadcastReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(FrameBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(ImageBroadcastReceiver);
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
-        // Lausanne
-        double latitude = 46.5197;
-        double longitude = 6.6323;
-        // Add a marker in Sydney and move the camera
-        LatLng currentLocation = new LatLng(latitude, longitude);
-        Log.e(TAG, "Current location: " + currentLocation);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Here"));
-    }
 
     @Override
 // Activity
@@ -160,5 +107,38 @@ public class MainActivity extends WearableActivity implements OnMapReadyCallback
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onEnterAmbient(Bundle ambientDetails) {
+        super.onEnterAmbient(ambientDetails);
+        updateDisplay();
+    }
+
+    @Override
+    public void onExitAmbient() {
+        super.onExitAmbient();
+        updateDisplay();
+    }
+
+    private void updateDisplay() {
+
+        if(isAmbient()){
+            setContentView(R.layout.ambient_main);
+        }
+        else {
+            setContentView(R.layout.activity_main);
+            if(bmpProfile != null)
+            {
+                ImageView imageView = findViewById(R.id.PreviewWindow);
+                TextView textView = findViewById(R.id.ImagePreview);
+                TextView clear_view = findViewById(R.id.hint_text);
+
+                clear_view.setText("");
+                imageView.setImageBitmap(bmpProfile);
+
+                textView.setText("Image Preview");
+            }
+        }
     }
 }

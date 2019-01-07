@@ -36,11 +36,9 @@ allprojects {
                 shot_status_path: "/SHOT_STATUS",
                 shot_status       : "SHOT_STATUS",
 
-                send_frame_path: "/SEND_FRAME",
-                send_frame       : "SEND_FRAME",
 
-                send_codec_path: "/SEND_CODEC",
-                send_codec       : "SEND_CODEC",
+                send_image_path: "/SEND_IMAGE",
+                send_image     : "SEND_IMAGE",
         ]
     }
 }

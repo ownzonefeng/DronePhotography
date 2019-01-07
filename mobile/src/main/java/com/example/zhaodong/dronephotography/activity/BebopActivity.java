@@ -1,22 +1,23 @@
 package com.example.zhaodong.dronephotography.activity;
 
-import android.app.ActionBar;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,20 +31,19 @@ import com.example.zhaodong.dronephotography.WearService;
 import com.example.zhaodong.dronephotography.drone.BebopDrone;
 import com.example.zhaodong.dronephotography.view.H264VideoView;
 import com.example.zhaodong.dronephotography.R;
-import com.example.zhaodong.dronephotography.view.myARControllerCodec;
-import com.example.zhaodong.dronephotography.view.myARFrame;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
-import com.parrot.arsdk.arcontroller.ARCONTROLLER_STREAM_CODEC_TYPE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 public class BebopActivity extends AppCompatActivity {
     private static final String TAG = "BebopActivity";
@@ -122,6 +122,7 @@ public class BebopActivity extends AppCompatActivity {
         RemoteTakePic = new RemoteTakePic();
         LocalBroadcastManager.getInstance(this).registerReceiver(RemoteTakePic, new
                 IntentFilter(RECEIVED_SHOT));
+        Toast.makeText(this, "Welcome back!", Toast.LENGTH_SHORT).show();
 
         //Make the navigation bar transparent:
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -185,12 +186,51 @@ public class BebopActivity extends AppCompatActivity {
             if(shot == 1){
                 mBebopDrone.takePicture();
                 mBebopDrone.getLatestMedia();
-                Toast.makeText(context.getApplicationContext(), R.string.photo_taken, Toast.LENGTH_SHORT).show();
+                try {
+                    TimeUnit.SECONDS.sleep(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                SendPreview();
+                Toast.makeText(context.getApplicationContext(), "Photo is taken", Toast.LENGTH_SHORT).show();
             }
             else{
                 Toast.makeText(context.getApplicationContext(), "Failure", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void SendPreview(){
+        File newImage = lastImage();
+        final InputStream imageStream;
+
+        try {
+            imageStream = new FileInputStream(newImage);
+            Bitmap image_send = BitmapFactory.decodeStream(imageStream);
+            final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            image_send.compress(Bitmap.CompressFormat.JPEG, 90, byteStream);Intent intentWear = new Intent(BebopActivity.this,WearService.class);
+            intentWear.setAction(WearService.ACTION_SEND.SEND_IMAGE.name());
+            intentWear.putExtra(WearService.SEND_IMAGE, byteStream.toByteArray());
+            startService(intentWear);
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+    public File lastImage(){
+        File[] fileList = Environment.getExternalStoragePublicDirectory("ARSDKMedias").listFiles();
+        long lastMod = Long.MIN_VALUE;
+        File choice = null;
+        for (File file : fileList) {
+            if (file.lastModified() > lastMod) {
+                choice = file;
+                lastMod = file.lastModified();
+            }
+        }
+        return choice;
     }
 
     private void initIHM() {
@@ -605,22 +645,11 @@ public class BebopActivity extends AppCompatActivity {
         @Override
         public void configureDecoder(ARControllerCodec codec) {
             mVideoView.configureDecoder(codec);
-            /*myARControllerCodec codec_info = new myARControllerCodec(codec);
-            Intent intent = new Intent(BebopActivity.this, WearService.class);
-            intent.setAction(WearService.ACTION_SEND.SEND_FRAME.name());
-            intent.putExtra(WearService.SEND_FRAME, codec_info);
-            startService(intent);*/
         }
 
         @Override
         public void onFrameReceived(ARFrame frame) {
             mVideoView.displayFrame(frame);
-            myARFrame myFrame = new myARFrame(frame);
-            Intent intent = new Intent(BebopActivity.this, WearService.class);
-            intent.setAction(WearService.ACTION_SEND.SEND_FRAME.name());
-            intent.putExtra(WearService.SEND_FRAME, myFrame);
-            startService(intent);
-
         }
 
         @Override
