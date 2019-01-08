@@ -51,26 +51,6 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-            case STARTACTIVITY:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                break;
-            case MESSAGE:
-                String message = intent.getStringExtra(MESSAGE);
-                if (message == null) message = "";
-                sendMessage(message, intent.getStringExtra(PATH));
-                break;
-            case EXAMPLE_DATAMAP:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
-                putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, intent.getIntExtra(DATAMAP_INT, -1));
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key, intent.getIntegerArrayListExtra(DATAMAP_INT_ARRAYLIST));
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
-            case EXAMPLE_ASSET:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_asset);
-                putDataMapRequest.getDataMap().putAsset(BuildConfig.W_some_other_key, (Asset) intent.getParcelableExtra(IMAGE));
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
             case SHOT_STATUS:
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_shot_status_path);
                 putDataMapRequest.getDataMap().putDouble(BuildConfig.W_shot_status, intent
@@ -150,23 +130,6 @@ public class WearService extends WearableListenerService {
 
                 assert uri.getPath() != null;
                 switch (uri.getPath()) {
-                    case BuildConfig.W_example_path_asset:
-                        // Extract the data behind the key you know contains data
-                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig.W_some_other_key);
-                        intent = new Intent("REPLACE_THIS_WITH_A_STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        bitmapFromAsset(asset, intent, "REPLACE_THIS_WITH_A_STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        break;
-                    case BuildConfig.W_example_path_datamap:
-                        // Extract the data behind the key you know contains data
-                        int integer = dataMapItem.getDataMap().getInt(BuildConfig.W_a_key);
-                        ArrayList<Integer> arraylist = dataMapItem.getDataMap().getIntegerArrayList(BuildConfig.W_some_other_key);
-                        for (Integer i : arraylist)
-                            Log.i(TAG, "Got integer " + i + " from array list");
-                        intent = new Intent("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", integer);
-                        intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                        break;
                     case BuildConfig.W_send_image_path:
                         DataMap dataMap_image = dataMapItem.getDataMap().getDataMap(BuildConfig.W_send_image);
                         intent = new Intent(MainActivity.RECEIVED_IMAGE);
@@ -201,35 +164,7 @@ public class WearService extends WearableListenerService {
         }
 
         switch (path) {
-            case BuildConfig.W_path_start_activity:
-                Log.v(TAG, "Message asked to open Activity");
-                Intent startIntent = null;
-                switch (data) {
-                    case BuildConfig.W_mainactivity:
-                        startIntent = new Intent(this, MainActivity.class);
-                        break;
-                }
 
-                if (startIntent == null) {
-                    Log.w(TAG, "Asked to start unhandled activity: " + data);
-                    return;
-                }
-                startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(startIntent);
-                break;
-            case BuildConfig.W_path_acknowledge:
-                Log.v(TAG, "Received acknowledgment");
-                break;
-            case BuildConfig.W_example_path_text:
-                Log.v(TAG, "Message contained text. Return a datamap for demo purpose");
-                ArrayList<Integer> arrayList = new ArrayList<>();
-                Collections.addAll(arrayList, 5, 7, 9, 10);
-
-                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
-                putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, 42);
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key, arrayList);
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + new String(messageEvent.getData()));
         }
