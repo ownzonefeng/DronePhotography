@@ -26,8 +26,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TransferQueue;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
@@ -53,10 +61,12 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
 
                 TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
                 ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
+                ImageView imageView0 = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon0);
 
                 textView.setText("Synchronizing");
                 textView.setTextColor(Color.GREEN);
                 imageView.setImageResource(R.drawable.firebase_yes);
+                imageView0.setImageResource(R.drawable.firebase_yes);
 
                 fireBaseUpload(context);
             }else{
@@ -76,11 +86,29 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
 
             TextView textView = (TextView)((DeviceListActivity)context).findViewById(R.id.FirebaseConnect);
             ImageView imageView = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon);
+            ImageView imageView0 = (ImageView)((DeviceListActivity)context).findViewById(R.id.FirebaseIcon0);
 
             textView.setText("NonSync");
             textView.setTextColor(Color.BLACK);
             imageView.setImageResource(R.drawable.firebase_not);
+            imageView0.setImageResource(R.drawable.firebase_not);
 
+        }
+    }
+    private static void copyFileUsingStream(File source, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            is.close();
+            os.close();
         }
     }
 
@@ -115,10 +143,17 @@ public class UploadBroadcastReceiver extends BroadcastReceiver {
                                             @Override
                                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                                 Toast.makeText(context.getApplicationContext(), "succeed to upload one file", Toast.LENGTH_SHORT).show();
+                                                File file1 = new File(Environment.getExternalStoragePublicDirectory("ARSDKMediasFirebase").getAbsolutePath()+File.separator+f.getName());
+                                                try {
+                                                    copyFileUsingStream(f, file1);
+                                                } catch (IOException e1) {
+                                                    e1.printStackTrace();
+                                                }
                                             }
                                         });
                                     }
                                 });
+
 
                     }
                 });

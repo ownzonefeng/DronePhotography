@@ -1,16 +1,10 @@
 package com.example.zhaodong.dronephotography.activity;
 
 import android.Manifest;
-import android.app.ActionBar;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -37,9 +31,6 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryService;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -77,12 +68,28 @@ public class DeviceListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_device_list);
 
         final ListView listView = (ListView) findViewById(R.id.list);
-
+         findViewById(R.id.FirebaseIcon0).setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 TextView textView = findViewById(R.id.FirebaseConnect);
+                 if(textView.getText().toString().equals("Synchronizing")){
+                     Intent intent = new Intent(DeviceListActivity.this, FirebaseActivity.class);
+                     startActivity(intent);
+                 }
+                 else{
+                     Toast.makeText(DeviceListActivity.this, "No internet.\ncan't access Firebase",Toast.LENGTH_LONG).show();
+                 }
+             }
+         });
         //Initialize a new BroadcastReceiver:
         mConnReceiver = new UploadBroadcastReceiver();
         File f = Environment.getExternalStoragePublicDirectory("ARSDKMedias");
         if(!f.exists()){
             f.mkdir();
+        }
+       File f0 = Environment.getExternalStoragePublicDirectory("ARSDKMediasFirebase");
+        if(!f0.exists()){
+            f0.mkdir();
         }
 
         // Assign adapter to ListView

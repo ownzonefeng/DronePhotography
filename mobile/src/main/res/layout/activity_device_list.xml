@@ -75,6 +75,39 @@
         android:onClick="galleryonCLick"
         app:srcCompat="@mipmap/gallery_icon" />
 
+    <TextView
+        android:id="@+id/galleryText"
+        android:layout_width="153dp"
+        android:layout_height="54dp"
+        android:layout_alignTop="@+id/galleryBt"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="118dp"
+        android:layout_toEndOf="@+id/galleryBt"
+        android:text="Gallery"
+        android:textSize="35sp" />
+
+    <ImageView
+        android:id="@+id/FirebaseIcon0"
+        android:layout_width="56dp"
+        android:layout_height="55dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="56dp"
+        app:srcCompat="@drawable/firebase_not" />
+
+    <TextView
+        android:id="@+id/firebaseText"
+        android:layout_width="153dp"
+        android:layout_height="49dp"
+        android:layout_alignStart="@+id/galleryText"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="55dp"
+        android:text="Firebase"
+        android:textSize="35sp" />
+
 
 </RelativeLayout>
 
