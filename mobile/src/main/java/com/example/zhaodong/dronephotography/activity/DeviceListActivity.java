@@ -104,13 +104,11 @@ public class DeviceListActivity extends AppCompatActivity {
                         break;
 
                     case ARDISCOVERY_PRODUCT_SKYCONTROLLER:
-                        intent = new Intent(DeviceListActivity.this, SkyControllerActivity.class);
                         break;
 
                     case ARDISCOVERY_PRODUCT_SKYCONTROLLER_2:
                     case ARDISCOVERY_PRODUCT_SKYCONTROLLER_2P:
                     case ARDISCOVERY_PRODUCT_SKYCONTROLLER_NG:
-                        intent = new Intent(DeviceListActivity.this, SkyController2Activity.class);
                         break;
 
                     case ARDISCOVERY_PRODUCT_JS:
@@ -125,7 +123,6 @@ public class DeviceListActivity extends AppCompatActivity {
                         intent = new Intent(DeviceListActivity.this, MiniDroneActivity.class);
                         break;
                     case ARDISCOVERY_PRODUCT_MINIDRONE_WINGX:
-                        intent = new Intent(DeviceListActivity.this, SwingDroneActivity.class);
                         break;
 
                     default:
