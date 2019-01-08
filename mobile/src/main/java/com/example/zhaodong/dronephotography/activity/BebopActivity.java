@@ -247,13 +247,10 @@ public class BebopActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (mBebopDrone.getFlyingState()) {
                     case ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_LANDED:
-                        Toast.makeText(BebopActivity.this, "Take off", Toast.LENGTH_SHORT).show();
                         mBebopDrone.takeOff();
                         break;
                     case ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_FLYING:
-                        break;
                     case ARCOMMANDS_ARDRONE3_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_HOVERING:
-                        Toast.makeText(BebopActivity.this, "Land", Toast.LENGTH_SHORT).show();
                         mBebopDrone.land();
                         break;
                     default:
@@ -275,6 +272,7 @@ public class BebopActivity extends AppCompatActivity {
         findViewById(R.id.recBt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 ImageButton recbt = findViewById(R.id.recBt);
                 if(isRecording){

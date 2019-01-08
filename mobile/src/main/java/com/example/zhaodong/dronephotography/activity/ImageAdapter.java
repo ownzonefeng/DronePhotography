@@ -70,6 +70,8 @@ public class ImageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = new ImageView(mcontext);
+        imageView.setMaxHeight(288);
+        imageView.setMaxWidth(512);
         imageView.setImageBitmap(bitmapList[position]);
         return imageView;
     }
