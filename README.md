@@ -25,10 +25,10 @@ On right, those 4 directions control the drone to yaw, including "up", "down", "
 Photo-taking button is located at the bottom-left corner. Once clicking on it, a hint "Photo is taken" will appear and the photo will be stored in local automatically(you can see from the notification whether the download is complete).
 
 7. Record video.   
-Video-recording button is located at the right-bottom corner. Once clicking on it, the button will turn grey, and a green timer will appear on the screen just below "Emergency" button. You need to press on it again to end recording.
+Video-recording button is located at the bottom-right corner. Once clicking on it, the button will turn grey, and a green timer will appear on the screen just below "Emergency" button. You need to press on it again to end recording.
 
 8. Zoom in/out.   
-Those two button are located at the right-bottom corner, just beside recording. 
+Those two button are located at the bottom-right corner, just beside recording. 
 
 9. Gallery  
 Press the button on top-right to display all photos nd videos stored in local tablet memory.
