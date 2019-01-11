@@ -57,6 +57,7 @@ public class BebopActivity extends AppCompatActivity {
     private boolean isRecording = false;
     private NotificationCompat.Builder mNotifyBuilder;
     private NotificationManager mNotifyManager;
+    protected File latest_file;
 
 
     private TextView timer ;
@@ -186,12 +187,6 @@ public class BebopActivity extends AppCompatActivity {
             if(shot == 1){
                 mBebopDrone.takePicture();
                 mBebopDrone.getLatestMedia();
-                try {
-                    TimeUnit.SECONDS.sleep(3);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                SendPreview();
                 Toast.makeText(context.getApplicationContext(), "Photo is taken", Toast.LENGTH_SHORT).show();
             }
             else{
@@ -201,7 +196,7 @@ public class BebopActivity extends AppCompatActivity {
     }
 
     public void SendPreview(){
-        File newImage = lastImage();
+        File newImage = latest_file;
         final InputStream imageStream;
 
         try {
@@ -219,20 +214,6 @@ public class BebopActivity extends AppCompatActivity {
             }
 
         }
-
-
-    public File lastImage(){
-        File[] fileList = Environment.getExternalStoragePublicDirectory("ARSDKMedias").listFiles();
-        long lastMod = Long.MIN_VALUE;
-        File choice = null;
-        for (File file : fileList) {
-            if (file.lastModified() > lastMod) {
-                choice = file;
-                lastMod = file.lastModified();
-            }
-        }
-        return choice;
-    }
 
     private void initIHM() {
         mVideoView = (H264VideoView) findViewById(R.id.videoView);
@@ -693,13 +674,11 @@ public class BebopActivity extends AppCompatActivity {
 
         @Override
         public void onDownloadComplete(String mediaName) {
-//            mCurrentDownloadIndex++;
-//            mDownloadProgressDialog.setSecondaryProgress(mCurrentDownloadIndex * 100);
-//
-//            if (mCurrentDownloadIndex > mNbMaxDownload) {
-//                mDownloadProgressDialog.dismiss();
-//                mDownloadProgressDialog = null;
-//            }
+            latest_file = new File(Environment.getExternalStoragePublicDirectory("ARSDKMedias").getAbsolutePath()+"/"+mediaName);
+            String suffix = mediaName.substring(mediaName.lastIndexOf(".") + 1);
+            if(suffix.equals("jpg")){
+                SendPreview();
+            }
             mNotifyBuilder.setProgress(0,0,false)
                     .setContentText("Download complete");
             mNotifyManager.notify(0,mNotifyBuilder.build());
