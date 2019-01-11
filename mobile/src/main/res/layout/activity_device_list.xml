@@ -82,11 +82,12 @@
         android:layout_alignTop="@+id/galleryBt"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="11dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="118dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="117dp"
         android:layout_toEndOf="@+id/galleryBt"
         android:text="Gallery"
-        android:textSize="35sp" />
+        android:textAlignment="viewStart"
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/FirebaseIcon0"
@@ -104,9 +105,10 @@
         android:layout_height="49dp"
         android:layout_alignStart="@+id/galleryText"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="55dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="52dp"
         android:text="Firebase"
-        android:textSize="35sp" />
+        android:textSize="20sp" />
 
 
 </RelativeLayout>

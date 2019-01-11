@@ -41,12 +41,12 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="147dp"
-        android:layout_height="48dp"
+        android:layout_width="276dp"
+        android:layout_height="59dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Firebase"
-        android:textSize="35sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/lviewFirebase"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent" />
