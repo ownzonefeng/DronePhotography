@@ -1,4 +1,4 @@
-# Readme First
+# Readme
 
 I. How to set up our project:
  - Install .apk into tablet and watch separately
