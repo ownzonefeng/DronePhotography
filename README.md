@@ -30,7 +30,7 @@ Video-recording button is located at the right-bottom corner. Once clicking on i
 8. Zoom in/out.   
 Those two button are located at the right-bottom corner, just beside recording. 
 
-9. Gallery
+9. Gallery  
 Press the button on top-right to display all photos nd videos stored in local tablet memory.
 
 10. Emergency
