@@ -33,5 +33,5 @@ Those two button are located at the right-bottom corner, just beside recording.
 9. Gallery  
 Press the button on top-right to display all photos nd videos stored in local tablet memory.
 
-10. Emergency
+10. Emergency    
 Be carefull not to touch "Emergency" button in a random situation, it will cause the drone to stop flying and drop to the ground directly(in this way the drone will get damaged).
