@@ -208,7 +208,8 @@ public class BebopActivity extends AppCompatActivity {
             imageStream = new FileInputStream(newImage);
             Bitmap image_send = BitmapFactory.decodeStream(imageStream);
             final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            image_send.compress(Bitmap.CompressFormat.JPEG, 90, byteStream);Intent intentWear = new Intent(BebopActivity.this,WearService.class);
+            image_send.compress(Bitmap.CompressFormat.JPEG, 90, byteStream);
+            Intent intentWear = new Intent(BebopActivity.this,WearService.class);
             intentWear.setAction(WearService.ACTION_SEND.SEND_IMAGE.name());
             intentWear.putExtra(WearService.SEND_IMAGE, byteStream.toByteArray());
             startService(intentWear);

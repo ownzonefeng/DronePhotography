@@ -181,32 +181,41 @@ public class SDCardModule {
     }
 
     public void getLatestFlightMedias() {
-//        if (!mThreadIsRunning) {
-//            mThreadIsRunning = true;
-            singleThreadExecutor.execute(new Runnable() {
+        if (!mThreadIsRunning) {
+            mThreadIsRunning = true;
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     ArrayList<ARDataTransferMedia> mediaList = getMediaList();
                     ArrayList<ARDataTransferMedia> latestMediaList = new ArrayList<>();
                     mNbMediasToDownload = 0;
-                    File[] fileList = Environment.getExternalStoragePublicDirectory("ARSDKMedias").listFiles();
-                    List<String> fileNameList = new ArrayList<>();
-                    if ((mediaList != null) && !mIsCancelled && (fileList!=null)) {
-                        for(File f:fileList){
-                            fileNameList.add(f.getName());
+                    if ((mediaList != null) && !mIsCancelled) {
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HHmmss", Locale.getDefault());
+                        ARDataTransferMedia latestMedia=mediaList.get(0);
+                        Date latestDate = null;
+                        try {
+                            latestDate = dateFormatter.parse(latestMedia.getDate());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
+                        for (ARDataTransferMedia media : mediaList) {
+                            try {
+                                if(dateFormatter.parse(media.getDate()).after(latestDate)){
+                                    latestDate = dateFormatter.parse(media.getDate());
+                                    latestMedia = media;
+                                }
 
-                        for (ARDataTransferMedia arDataTransferMedia: mediaList) {
-                            if(!fileNameList.contains(arDataTransferMedia.getName()))
-                            {
-                                latestMediaList.add(arDataTransferMedia);
+                            } catch (ParseException e) {
+                                Log.e(TAG, "Exception", e);
                             }
+
                             // exit if the async task is cancelled
                             if (mIsCancelled) {
                                 break;
                             }
                         }
-                        mNbMediasToDownload = latestMediaList.size();
+                        latestMediaList.add(latestMedia);
+                        mNbMediasToDownload = 1;
                     }
 
                     notifyMatchingMediasFound(mNbMediasToDownload);
@@ -218,9 +227,9 @@ public class SDCardModule {
                     mThreadIsRunning = false;
                     mIsCancelled = false;
                 }
-            });
+            }).start();
         }
-//    }
+    }
 
     public void cancelGetFlightMedias() {
         if (mThreadIsRunning) {
