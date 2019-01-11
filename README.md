@@ -9,8 +9,9 @@ II. How to test our project:
 Open our app, you will see the interface of DeviceListActvity(). Open "settings" and find the corresponding Bebop Drone hotspot, click on it and connect with Bebop Drone.
 
 2. Main Interface.   
-
 You can see the name of the Bebop Drone from the list "Please Select from the Following Drones:", click on it and then you will enter BebopActivity() interface.
+
+**Buttons inside the Main Interface:**
 
 3. Take Off.  
 
@@ -26,13 +27,13 @@ On right, those 4 directions control the drone to yaw, including "up", "down", "
 
 6. Take photos.    
 
-Photo-taking button is located at the left-bottom corner. Once clicking on it, a hint "Photo is taken" will appear and the photo will be stored in local automatically(you can see from the notification whether the download is complete).
+Photo-taking button is located at the bottom-left corner. Once clicking on it, a hint "Photo is taken" will appear and the photo will be stored in local automatically(you can see from the notification whether the download is complete).
 
 7. Record video.   
+Video-recording button is located at the right-bottom corner. Once clicking on it, the button will turn grey, and a green timer will appear on the screen just below "Emergency" button. You need to press on it again to end recording.
 
-Video-recording button is located at the right-bottom corner. Once clicking on it, the button will turn grey, and a green timer will appear on the screen just below "Emergency" button.
-
-8. Zoom in/out.
-
+8. Zoom in/out.   
+Those two button are located at the right-bottom corner, just beside recording. 
 
 9. Gallery
+Press the button on top-right to display all photos nd videos stored in local tablet memory.
