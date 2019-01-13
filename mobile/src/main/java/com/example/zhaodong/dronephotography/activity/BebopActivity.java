@@ -636,27 +636,9 @@ public class BebopActivity extends AppCompatActivity {
 
         @Override
         public void onMatchingMediasFound(int nbMedias) {
-            //mDownloadProgressDialog.dismiss();
 
             mNbMaxDownload = nbMedias;
             mCurrentDownloadIndex = 1;
-
-//            if (nbMedias > 0) {
-//                mDownloadProgressDialog = new ProgressDialog(BebopActivity.this, R.style.AppCompatAlertDialogStyle);
-//                mDownloadProgressDialog.setIndeterminate(false);
-//                mDownloadProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//                mDownloadProgressDialog.setMessage("Downloading medias");
-//                mDownloadProgressDialog.setMax(mNbMaxDownload * 100);
-//                mDownloadProgressDialog.setSecondaryProgress(mCurrentDownloadIndex * 100);
-//                mDownloadProgressDialog.setProgress(0);
-//                mDownloadProgressDialog.setCancelable(false);
-//                mDownloadProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        mBebopDrone.cancelGetLastFlightMedias();
-//                    }
-//                });
-//                mDownloadProgressDialog.show();
                 mNotifyBuilder = new NotificationCompat.Builder(BebopActivity.this, "download");
                 mNotifyBuilder.setContentTitle("DOWNLOAD MEDIA")
                         .setContentText("Download in progress")
@@ -669,7 +651,6 @@ public class BebopActivity extends AppCompatActivity {
 
         @Override
         public void onDownloadProgressed(String mediaName, int progress) {
-//            mDownloadProgressDialog.setProgress(((mCurrentDownloadIndex - 1) * 100) + progress);
         }
 
         @Override
