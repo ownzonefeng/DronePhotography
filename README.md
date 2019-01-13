@@ -44,8 +44,8 @@ Be carefull not to touch "Emergency" button in a random situation, it will cause
 
 2. Now since you are still connected with Bebop, you can only check your local Gallery(by pressing the "Gallery" button), the "Firebase" button is disabled.
 
-3.Then switch from Bebop Drone wifi to a normal wifi, and open the app again.
-You can see that some icons change here, and synchronization with Firebase starts. After a few seconds, click on the "Firebase" icon at bottom-left corner, you can see a list of photo names, which means those new photos have been uploaded to Firebase.
+3. Then switch from Bebop Drone wifi to a normal wifi, and open the app again. You can see that some icons change here, and synchronization with Firebase starts. After a few seconds, click on the "Firebase" icon at bottom-left corner, you can see a list of photo names, which means those new photos have been uploaded to Firebase.
+
 
 **IV.Connect with watch:**
 1. Open Bluetooth of both tablet and watch, let watch connect to the Bluetooth of tablet. Pay attention here that the watch has to maintain **a close distance** with the tablet, otherwise the Bluetooth connetion may not work.
