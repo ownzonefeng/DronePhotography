@@ -40,7 +40,7 @@ Be carefull not to touch "Emergency" button in a random situation, it will cause
 
 
 **III.Firebase Connection**
-1. Once you finish taking photos and recording videos on tablet, go back to the interface of DeviceListActvity. 
+1. Once you finish taking photos and recording videos on tablet, go back to the interface of **DeviceListActvity**. 
 
 2. Now since you are still connected with Bebop, you can only check your local Gallery(by pressing the "Gallery" button), the "Firebase" button is disabled.
 
