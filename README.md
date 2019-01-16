@@ -1,4 +1,4 @@
-# Readme
+# Project for Drone Photography
 
 **I. How to set up our project:**
  - Transfer mobile.apk into tablet, and install the application via mobile.apk
